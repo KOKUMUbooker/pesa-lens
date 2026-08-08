@@ -25,25 +25,35 @@
 
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="*,Auto,Auto" Padding="5,10" >
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto" Padding="5,10" >
             <Label Grid.Column="0" Text="Categories" FontSize="22" FontAttributes="Bold"
-                   VerticalOptions="Center"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-            <ImageButton Grid.Column="1" Command="{Binding OpenAddRuleCommand}"
-                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+               VerticalOptions="Center"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+
+            <ImageButton Grid.Column="1" Clicked="OnHelpTapped"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
                 <ImageButton.Source>
-                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Rule}"
-                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        Size="20"/>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Help}"
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
                 </ImageButton.Source>
             </ImageButton>
 
-            <ImageButton Grid.Column="2" Command="{Binding OpenAddCategoryCommand}"
-                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+            <ImageButton Grid.Column="2" Command="{Binding OpenAddRuleCommand}"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Rule}"
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+
+            <ImageButton Grid.Column="3" Command="{Binding OpenAddCategoryCommand}"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
-                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        Size="20"/>
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
                 </ImageButton.Source>
             </ImageButton>
         </Grid>
