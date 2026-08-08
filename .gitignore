@@ -6,6 +6,10 @@
 # dotenv files
 .env
 
+#key-store file
+pesascope-upload.keystore
+*.keystore
+
 # User-specific files
 *.rsuser
 *.suo
