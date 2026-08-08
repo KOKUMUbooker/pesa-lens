@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<uranium:UraniumContentPage
+    x:Class="PesaScope.App.Views.Budgets.BudgetsHelpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+    SafeAreaEdges="All"
+    BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto" Padding="5,10">
+            <Label Grid.Column="0" Text="How Budgets Work" FontSize="18" FontAttributes="Bold"
+                   VerticalOptions="Center" LineBreakMode="TailTruncation"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+            <ImageButton Grid.Column="1" Clicked="OnCloseTapped"
+                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Close}"
+                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,16,20,40">
+
+            <!-- Section: Two kinds of budget -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Two Kinds of Budget" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="This screen tracks two independent things: an Overall budget — one total limit across everything you spend in a month — and Category budgets — separate limits for individual categories like Transport or Food &amp; Groceries. You can use either, both, or neither. They don't affect each other."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Setting overall budget -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Setting the Overall Budget" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="1.  Tap the tune icon at the top of the Budgets screen." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="2.  Enter a total monthly limit, e.g. 30,000." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="3.  Tap Save. Every transaction you make, in any category, counts toward this figure." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Section: Setting category budget -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Setting a Category Budget" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="1.  Find the category under 'Category budgets' and tap 'Set limit' (or 'Edit' if one already exists)." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="2.  Enter a monthly limit for just that category." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="3.  Adjust the warning threshold if you want — this decides how close to the limit you get warned, before you actually go over." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="4.  Tap Save. Only transactions in that category count toward it." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Warning threshold explained -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Warning Threshold vs. Limit" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="The monthly limit is your hard ceiling. The warning threshold is an earlier checkpoint — for example, at 80% you'll get a heads-up notification before you actually exceed the budget, giving you a chance to slow down."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Notifications -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Notifications" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="Budget notifications have a master switch under Settings → Budget Notifications. That switch must be on for any warning or exceeded alerts to fire, for both the overall budget and every category budget. Each category budget also has its own on/off toggle in its edit sheet, so you can silence individual categories while keeping others active."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: History -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Budget History" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="At the end of each month, a snapshot of your spending against each budget is saved automatically. Tap the clock icon at the top of this screen to look back at any past month — even categories or the overall budget you've since changed or removed will still show up in that month's history."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <Button Text="Got it" Clicked="OnCloseTapped"
+                    HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                    Margin="0,10,0,0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</uranium:UraniumContentPage>

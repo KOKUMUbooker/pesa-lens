@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<uranium:UraniumContentPage
+    x:Class="PesaScope.App.Views.Categories.CategoriesHelpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+    SafeAreaEdges="All"
+    BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto" Padding="5,10">
+            <Label Grid.Column="0" Text="How Categories &amp; Rules Work" FontSize="18" FontAttributes="Bold"
+                   VerticalOptions="Center" LineBreakMode="TailTruncation"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+            <ImageButton Grid.Column="1" Clicked="OnCloseTapped"
+                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Close}"
+                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,16,20,40">
+
+            <!-- Section: Categories -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="What's a Category?" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}">
+                    <Label.Text>A category groups your transactions together, like "Food &amp; Groceries" or "Transport", so you can see where your money goes each month. Some categories (marked without edit/delete options) are built into the app. You can also create your own.</Label.Text>
+                </Label>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Rules -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="What's a Rule?" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="A rule watches new transactions as they come in and automatically assigns them to a category — so you don't have to categorize every M-Pesa message by hand."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: How they relate -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="How They're Linked" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="Every rule points to exactly one category. A single category can have many rules pointing to it. For example, the 'Transport' category might have three rules: one for Uber, one for Little, one for Bolt — all three point to the same category."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Creating a category -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Creating a Category" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="1.  Tap the + icon at the top of the Categories screen." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="2.  Give it a name, e.g. 'Subscriptions'." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="3.  Pick a color to distinguish it in the chart and lists." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="4.  Tap Save." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Section: Creating & linking a rule -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Creating and Linking a Rule" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="1.  Tap the rule icon at the top of the Categories screen." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="2.  Choose a Rule Type — see below for what each one matches." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="3.  Enter the Match Value — the text, paybill number, or transaction type to watch for." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="4.  Under 'Assign to Category', pick the category this rule should link to. This is the linking step." FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="5.  Tap Save. Matching transactions — new and future — will now be filed under that category automatically." FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Section: Rule types explained -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Rule Types Explained" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,12">
+                    <VerticalStackLayout Spacing="10">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Contains Text" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                            <Label Text="Matches if the transaction description contains this text anywhere — e.g. 'NAIVAS' or 'UBER'." FontSize="13"
+                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Paybill Number" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                            <Label Text="Matches transactions to a specific paybill, e.g. 888880 for KPLC Prepaid." FontSize="13"
+                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Transaction Type" FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                            <Label Text="Matches an entire kind of transaction, e.g. all Airtime Purchases or all Received Money." FontSize="13"
+                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Conflicts -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="When Multiple Rules Match" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="If more than one rule matches the same transaction, the rule with the highest priority wins. You don't need to worry about this for most everyday rules — it mainly matters if you create several overlapping rules yourself."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <Button Text="Got it" Clicked="OnCloseTapped"
+                    HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                    Margin="0,10,0,0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</uranium:UraniumContentPage>

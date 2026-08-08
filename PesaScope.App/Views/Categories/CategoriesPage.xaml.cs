@@ -47,6 +47,11 @@ public partial class CategoriesPage : UraniumUI.Pages.UraniumContentPage
         }
     }
 
+    private async void OnHelpTapped(object sender, EventArgs e)
+    {
+        await Shell.Current.Navigation.PushModalAsync(new CategoriesHelpPage());
+    }
+
     // ── Color picker ──────────────────────────────────────────────────────────
 
     private void BuildColorPicker()
