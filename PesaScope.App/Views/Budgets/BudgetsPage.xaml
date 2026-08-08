@@ -21,27 +21,37 @@
 
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="*,Auto,Auto" Padding="5,10" >
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto" Padding="5,10" >
             <Label Grid.Column="0" Text="Budgets" FontSize="22" FontAttributes="Bold"
-                   VerticalOptions="Center"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+               VerticalOptions="Center"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
 
-            <ImageButton Grid.Column="1" Command="{Binding GoToHistoryCommand}"
-                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44"
-                         ToolTipProperties.Text="Navigate to budget history">
+            <ImageButton Grid.Column="1" Clicked="OnHelpTapped"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44"
+                     ToolTipProperties.Text="How budgets work">
                 <ImageButton.Source>
-                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.History}"
-                         Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                         Size="20"/>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Help}"
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
                 </ImageButton.Source>
             </ImageButton>
-            <ImageButton Grid.Column="2" Command="{Binding OpenOverallBudgetCommand}"
-                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44"
-                         ToolTipProperties.Text="Set overall budget">
+
+            <ImageButton Grid.Column="2" Command="{Binding GoToHistoryCommand}"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44"
+                     ToolTipProperties.Text="Navigate to budget history">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.History}"
+                     Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                     Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+            <ImageButton Grid.Column="3" Command="{Binding OpenOverallBudgetCommand}"
+                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44"
+                     ToolTipProperties.Text="Set overall budget">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Tune}"
-                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        Size="20"/>
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
                 </ImageButton.Source>
             </ImageButton>
         </Grid>

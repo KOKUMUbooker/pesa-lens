@@ -21,4 +21,9 @@ public partial class BudgetsPage : UraniumUI.Pages.UraniumContentPage
         _loaded = true;
         await _vm.LoadAsync();
     }
+    
+    private async void OnHelpTapped(object sender, EventArgs e)
+    {
+        await Shell.Current.Navigation.PushModalAsync(new BudgetsHelpPage());
+    }
 }
