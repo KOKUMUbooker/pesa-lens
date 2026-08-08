@@ -81,7 +81,7 @@ This produces a signed `.aab` (and `.apk`) ready to upload.
 `dotnet publish` writes the signed build artifacts under the App project's `bin` folder:
 
 ```
-PesaScope.App\bin\Release\net10.0-android\
+PesaScope.App\bin\Release\net10.0-android\publish
 ```
 
 Inside that folder look for:
