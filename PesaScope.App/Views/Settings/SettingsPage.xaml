@@ -433,6 +433,38 @@
                             Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
                             Opacity="0.5" />
 
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="16,14" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenAppWebsiteCommand}" />
+                            </Grid.GestureRecognizers>
+
+                            <Image Grid.Column="0" VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Web}"
+                                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        Size="24" />          
+                                </Image.Source>
+                            </Image>
+                            <Label
+                                Grid.Column="1"
+                                Text="App Website"
+                                FontSize="15"
+                                VerticalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
+                            <Label
+                                Grid.Column="2"
+                                Text="↗"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                VerticalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Margin="16,0"
+                             Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
+                             Opacity="0.5" />
+
                         <!-- Send Feedback -->
                         <Grid
                             ColumnDefinitions="Auto,*,Auto"
