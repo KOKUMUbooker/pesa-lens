@@ -276,7 +276,7 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
             await DisplayAlertAsync(
                 "One More Step",
                 "Please switch back to your preferred SMS app before continuing. " +
-                "Tap \"Restore Default SMS App\" below to do this.",
+                "Tap \"Restore Default SMS App\" above to do this.",
                 "OK");
             return; // ← block navigation
         }

@@ -137,10 +137,13 @@
         </ScrollView>
 
         <!-- ── Bottom: Done button (hidden until import completes) ─────── -->
-        <VerticalStackLayout VerticalOptions="Center" Spacing="0" Padding="32,64,32,48">
+        <VerticalStackLayout
+            Grid.Row="1"
+            VerticalOptions="Center"
+            Spacing="0"
+            Padding="32,64,32,48">
             <Button
                 x:Name="DoneButton"
-                Grid.Row="1"
                 Text="Go to Dashboard"
                 IsVisible="False"
                 Clicked="OnDoneClicked"
