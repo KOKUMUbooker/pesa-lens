@@ -41,7 +41,7 @@ public partial class SettingsViewModel : ObservableObject
 
     // ── About ─────────────────────────────────────────────────────────────────
     public string AppVersion =>
-        AppInfo.VersionString is { } v ? $"v{v} ({AppInfo.BuildString})" : "v1.0.0";
+        AppInfo.VersionString is { } v ? $"v{v} ({AppInfo.BuildString})" : "v1.0.2";
 
     // ── Developer info ────────────────────────────────────────────────────────
 
