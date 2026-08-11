@@ -141,7 +141,7 @@
             Grid.Row="1"
             VerticalOptions="Center"
             Spacing="0"
-            Padding="32,64,32,48">
+            Padding="32,16,32,24">
             <Button
                 x:Name="DoneButton"
                 Text="Go to Dashboard"
