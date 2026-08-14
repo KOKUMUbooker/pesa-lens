@@ -33,7 +33,9 @@ public class MpesaSmsParser : IMpesaSmsParser
             ?? TryParseDataBundle(body, smsId, smsTimestamp)
             ?? TryParseReversal(body, smsId, smsTimestamp)
             ?? TryParseDeposit(body, smsId, smsTimestamp)
-            ?? TryParseFuliza(body, smsId, smsTimestamp);
+            ?? TryParseFuliza(body, smsId, smsTimestamp)
+            ?? TryParseMShwariWithdrawal(body, smsId, smsTimestamp)
+            ?? TryParseMShwariDeposit(body, smsId, smsTimestamp);
 
         if (transaction is not null) transaction.OriginalSms = smsBody;
 
@@ -136,6 +138,24 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         return BuildTransaction(m, TransactionType.Fuliza, smsId, timestamp,
             counterpartyName: "Fuliza M-PESA");
+    }
+
+    private static Transaction? TryParseMShwariWithdrawal(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.MShwariWithdrawalPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.MShwari, smsId, timestamp,
+            counterpartyName: "M-Shwari Withdrawal");
+    }
+
+    private static Transaction? TryParseMShwariDeposit(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.MShwariDepositPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.MShwari, smsId, timestamp,
+            counterpartyName: "M-Shwari Deposit");
     }
 
     // ── Builder ──────────────────────────────────────────────────────────────

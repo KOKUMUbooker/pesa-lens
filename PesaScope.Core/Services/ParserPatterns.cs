@@ -102,4 +102,22 @@ public static class ParserPatterns
         @"(?<agent>.+?) " +
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    public static readonly Regex MShwariWithdrawalPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) transferred from M-Shwari account on\s*" +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"M-Shwari balance is Ksh(?<mshwari_balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"Transaction cost Ksh\.?(?<cost>[\d,]+\.?\d*)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    public static readonly Regex MShwariDepositPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) transferred to M-Shwari account on\s*" +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"New M-Shwari saving account balance is Ksh(?<mshwari_balance>[\d,]+\.?\d*)\.\s*" +
+        @"Transaction cost Ksh\.?(?<cost>[\d,]+\.?\d*)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 }
