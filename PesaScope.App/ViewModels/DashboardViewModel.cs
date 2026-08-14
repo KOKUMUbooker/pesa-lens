@@ -95,6 +95,17 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty] private bool _isRefreshing = false;
     [ObservableProperty] private string _lastSynced = "Never";
 
+    // ── Net balance help sheet ────────────────────────────────────────────────
+    [ObservableProperty] private bool _isNetBalanceHelpOpen;
+
+    public bool IsNetBalanceNegative => NetBalance < 0;
+
+    [RelayCommand]
+    private void ShowNetBalanceHelp() => IsNetBalanceHelpOpen = true;
+
+    [RelayCommand]
+    private void CloseNetBalanceHelp() => IsNetBalanceHelpOpen = false;
+
     // ── Constructor ───────────────────────────────────────────────────────────
     public DashboardViewModel(ITransactionRepository transactions, ICategoryRepository categories)
     {
@@ -461,6 +472,8 @@ public partial class DashboardViewModel : ObservableObject
 
         TopCategories = top3;
     }
+
+    partial void OnNetBalanceChanged(decimal value) => OnPropertyChanged(nameof(IsNetBalanceNegative));
 
     private async Task LoadRecentTransactionsAsync()
     {

@@ -61,6 +61,46 @@
         </Grid>
     </Shell.TitleView>
 
+    <uranium:UraniumContentPage.Attachments>
+        <material:BottomSheetView
+        xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+        x:Name="NetBalanceHelpSheet"
+        IsPresented="{Binding IsNetBalanceHelpOpen}"
+        IsVisible="{Binding IsNetBalanceHelpOpen}"
+        CloseOnTapOutside="True"
+        BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+
+            <VerticalStackLayout Padding="24,12,24,48" Spacing="16">
+
+                <Label Text="How net balance is calculated" FontSize="18" FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
+                <Label FontSize="14"
+                   Text="Net Balance = Money In − Money Out for the selected period."
+                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                
+                <Label FontSize="14"
+                   Text="Only M-Pesa SMS transactions on this device are counted — cash, bank transfers, and other wallets aren't included."
+                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                <!-- Extra note, only shown when balance is negative -->
+                <Border IsVisible="{Binding IsNetBalanceNegative}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14">
+                    <Label FontSize="13"
+                       Text="A negative balance usually means some income for this period — like a bank deposit or cash top-up — wasn't captured as an M-Pesa message. Your actual M-Pesa balance is unaffected."
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </Border>
+
+                <Button Text="Got it" Command="{Binding CloseNetBalanceHelpCommand}"
+                    HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>
+            </VerticalStackLayout>
+        </material:BottomSheetView>
+    </uranium:UraniumContentPage.Attachments>
+
     <!-- ═══════════════════════════════════════════════════════════════════════
          Root – RefreshView wraps everything for pull-to-refresh
     ════════════════════════════════════════════════════════════════════════ -->
@@ -233,9 +273,10 @@
                         NetBalance="{Binding FormattedNetBalance}"
                         PeriodLabel="{Binding PeriodLabel}"
                         MoneyIn="{Binding FormattedMoneyIn}"
-                        MoneyOut="{Binding FormattedMoneyOut}" />
+                        MoneyOut="{Binding FormattedMoneyOut}"
+                        ShowHelpCommand="{Binding ShowNetBalanceHelpCommand}" />
 
-                    <!-- ── DAILY SPENDING CHART ──────────────────────────── -->
+                        <!-- ── DAILY SPENDING CHART ──────────────────────────── -->
                     <HomeControls:SpendingChartView
                         ChartTitle="{Binding ChartTitle}"
                         PeriodLabel="{Binding PeriodLabel}"

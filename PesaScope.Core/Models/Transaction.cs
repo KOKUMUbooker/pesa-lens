@@ -96,5 +96,6 @@ public enum TransactionType
     Deposit = 7,
     Fuliza = 8,
     MShwari = 9,
-    Reversal = 10
+    Reversal = 10,
+    GlobalPayment = 11
 }

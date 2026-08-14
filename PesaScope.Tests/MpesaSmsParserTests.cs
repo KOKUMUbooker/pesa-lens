@@ -707,6 +707,285 @@ public class MpesaSmsParserTests
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // M-Shwari — withdrawal (money leaves M-Shwari, lands in M-PESA)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string MShwariWithdrawalSms =
+        "UHDMK2T7ZU Confirmed.Ksh1,000.00 transferred from M-Shwari account on " +
+        "13/8/26 at 1:09 PM. M-Shwari balance is Ksh2,569.07 .M-PESA balance is " +
+        "Ksh1,031.03 .Transaction cost Ksh.0.00";
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ReturnsCorrectType()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.MShwari, result.Type);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsAmount()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(1000.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsMpesaBalanceNotMShwariBalance()
+    {
+        // BalanceAfterTransaction must be the M-PESA balance (Ksh1,031.03),
+        // not the M-Shwari balance (Ksh2,569.07)
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(1031.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_CounterpartyIsMShwariWithdrawal()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("M-Shwari Withdrawal", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsMpesaCode()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("UHDMK2T7ZU", result.MpesaCode);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // M-Shwari — deposit (money leaves M-PESA, lands in M-Shwari)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string MShwariDepositSms =
+        "UHEMK2ZU8L Confirmed.Ksh50.00 transferred to M-Shwari account on " +
+        "14/8/26 at 10:02 PM. M-PESA balance is Ksh811.03 .New M-Shwari saving " +
+        "account balance is Ksh2,619.07. Transaction cost Ksh.0.00";
+
+    [Fact]
+    public void Parse_MShwariDeposit_ReturnsCorrectType()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.MShwari, result.Type);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsAmount()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(50.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsMpesaBalance()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(811.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_CounterpartyIsMShwariDeposit()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("M-Shwari Deposit", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsMpesaCode()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("UHEMK2ZU8L", result.MpesaCode);
+    }
+
+    [Fact]
+    public void Parse_MShwariMessages_DoNotCrossMatchEachOther()
+    {
+        // Regression guard: "from" vs "to" wording must route to distinct patterns
+        var withdrawal = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        var deposit = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+
+        Assert.NotNull(withdrawal);
+        Assert.NotNull(deposit);
+        Assert.NotEqual(withdrawal.CounterpartyName, deposit.CounterpartyName);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Global Payment — card charge (PayPal/DigitalOcean via M-PESA CARD)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string GlobalPaymentCardSms =
+        "UH1MK1E11Z Confirmed. Ksh559.55 sent to M-PESA CARD for account PAYPAL " +
+        "*DIGITALOCEA      40293573213   US on 1/8/26 at 9:56 AM New M-PESA " +
+        "balance is Ksh2,270.03. Transaction cost, Ksh0.00.";
+
+    [Fact]
+    public void Parse_GlobalPaymentCard_ReturnsGlobalPaymentType()
+    {
+        var result = _parser.Parse(GlobalPaymentCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.GlobalPayment, result.Type);
+    }
+
+    [Fact]
+    public void Parse_GlobalPaymentCard_ExtractsAmount()
+    {
+        var result = _parser.Parse(GlobalPaymentCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(559.55m, result.Amount);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Global Payment — Western Union send
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string GlobalTransferSendSms =
+        "SH56ABC123 Confirmed. Ksh 5,500.00 sent to John Doe via Western Union " +
+        "(MTCN: 1234567890) on 14/8/26 at 10:45 AM. Fee: Ksh 250.00. New M-PESA " +
+        "balance is Ksh 12,400.00.";
+
+    [Fact]
+    public void Parse_GlobalTransferSend_ReturnsGlobalPaymentType()
+    {
+        var result = _parser.Parse(GlobalTransferSendSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.GlobalPayment, result.Type);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferSend_ExtractsAmount()
+    {
+        var result = _parser.Parse(GlobalTransferSendSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(5500.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferSend_ExtractsRecipientName()
+    {
+        var result = _parser.Parse(GlobalTransferSendSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("John Doe", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferSend_ExtractsMtcnAsCounterpartyNumber()
+    {
+        var result = _parser.Parse(GlobalTransferSendSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("1234567890", result.CounterpartyNumber);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferSend_ExtractsBalance()
+    {
+        var result = _parser.Parse(GlobalTransferSendSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(12400.00m, result.BalanceAfterTransaction);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Global Payment — M-Pesa Global receive
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string GlobalTransferReceiveSms =
+        "SH56XYZ789 Confirmed. You have received USD 45.00 (Ksh 5,850.00) from " +
+        "Jane Smith via [M-Pesa Global](https://www.safaricom.co.ke/main-mpesa/" +
+        "m-pesa-services/m-pesa-global) on 14/8/26 at 2:15 PM. New M-PESA " +
+        "balance is Ksh 18,250.00.";
+
+    [Fact]
+    public void Parse_GlobalTransferReceive_ReturnsGlobalPaymentType()
+    {
+        var result = _parser.Parse(GlobalTransferReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.GlobalPayment, result.Type);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferReceive_ExtractsKshAmountNotForeignAmount()
+    {
+        // Amount must be the Ksh-equivalent (5,850.00), not the USD figure (45.00)
+        var result = _parser.Parse(GlobalTransferReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(5850.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferReceive_ExtractsSenderName()
+    {
+        var result = _parser.Parse(GlobalTransferReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("Jane Smith", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_GlobalTransferReceive_ExtractsBalance()
+    {
+        var result = _parser.Parse(GlobalTransferReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(18250.00m, result.BalanceAfterTransaction);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Global Payment — GlobalPay virtual card checkout
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string GlobalVirtualCardSms =
+        "SH56CAR987 Confirmed. Ksh 1,940.00 paid to Netflix US using M-PESA " +
+        "GlobalPay virtual card ending *4321 on 14/8/26 at 6:30 PM. " +
+        "Exch Rate: 1 USD = Ksh 130.00. Fee: Ksh 0.00. New M-PESA balance is " +
+        "Ksh 16,310.00.";
+
+    [Fact]
+    public void Parse_GlobalVirtualCard_ReturnsGlobalPaymentType()
+    {
+        var result = _parser.Parse(GlobalVirtualCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.GlobalPayment, result.Type);
+    }
+
+    [Fact]
+    public void Parse_GlobalVirtualCard_ExtractsAmount()
+    {
+        var result = _parser.Parse(GlobalVirtualCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(1940.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_GlobalVirtualCard_ExtractsMerchantName()
+    {
+        var result = _parser.Parse(GlobalVirtualCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("Netflix US", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_GlobalVirtualCard_ExtractsCardLast4()
+    {
+        var result = _parser.Parse(GlobalVirtualCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("card *4321", result.CounterpartyNumber);
+    }
+
+    [Fact]
+    public void Parse_GlobalVirtualCard_ExtractsBalance()
+    {
+        var result = _parser.Parse(GlobalVirtualCardSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(16310.00m, result.BalanceAfterTransaction);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -741,6 +1020,18 @@ public class MpesaSmsParserTests
     [InlineData(
         "UF7MKM7FTT confirmed. Reversal of transaction UF7MK70VIL has been successfully reversed on 7/6/26 at 5:56 PM and Ksh30.00 is credited to your M-PESA account. New M-PESA account balance is Ksh1,956.99.",
         TransactionType.Reversal)]
+    [InlineData(
+        "UHDMK2T7ZU Confirmed.Ksh1,000.00 transferred from M-Shwari account on 13/8/26 at 1:09 PM. M-Shwari balance is Ksh2,569.07 .M-PESA balance is Ksh1,031.03 .Transaction cost Ksh.0.00",
+        TransactionType.MShwari)]
+    [InlineData(
+        "UHEMK2ZU8L Confirmed.Ksh50.00 transferred to M-Shwari account on 14/8/26 at 10:02 PM. M-PESA balance is Ksh811.03 .New M-Shwari saving account balance is Ksh2,619.07. Transaction cost Ksh.0.00",
+        TransactionType.MShwari)]
+    [InlineData(
+        "SH56ABC123 Confirmed. Ksh 5,500.00 sent to John Doe via Western Union (MTCN: 1234567890) on 14/8/26 at 10:45 AM. Fee: Ksh 250.00. New M-PESA balance is Ksh 12,400.00.",
+        TransactionType.GlobalPayment)]
+    [InlineData(
+        "SH56CAR987 Confirmed. Ksh 1,940.00 paid to Netflix US using M-PESA GlobalPay virtual card ending *4321 on 14/8/26 at 6:30 PM. Exch Rate: 1 USD = Ksh 130.00. Fee: Ksh 0.00. New M-PESA balance is Ksh 16,310.00.",
+        TransactionType.GlobalPayment)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);

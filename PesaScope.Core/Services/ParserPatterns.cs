@@ -102,4 +102,65 @@ public static class ParserPatterns
         @"(?<agent>.+?) " +
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    public static readonly Regex MShwariWithdrawalPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) transferred from M-Shwari account on\s*" +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"M-Shwari balance is Ksh(?<mshwari_balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"Transaction cost Ksh\.?(?<cost>[\d,]+\.?\d*)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    public static readonly Regex MShwariDepositPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) transferred to M-Shwari account on\s*" +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\s*\.\s*" +
+        @"New M-Shwari saving account balance is Ksh(?<mshwari_balance>[\d,]+\.?\d*)\.\s*" +
+        @"Transaction cost Ksh\.?(?<cost>[\d,]+\.?\d*)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    // Card charge, e.g. PayPal/DigitalOcean, routed through M-PESA CARD
+    public static readonly Regex GlobalPaymentCardPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
+        @"(?<name>[A-Z0-9\s&'\-\.]+?) for account " +
+        @"(?<account>[A-Z0-9\*\s]+?) on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\s*" +
+        @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
+        @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    // Western Union (or similar money-transfer agent) send
+    public static readonly Regex GlobalTransferSendPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh\s*(?<amount>[\d,]+\.?\d*) sent to " +
+        @"(?<name>[A-Za-z][A-Za-z\s]*?) via " +
+        @"(?<provider>[A-Za-z\s]+?)\s*\(MTCN:\s*(?<mtcn>\d+)\) on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"Fee:\s*Ksh\s*(?<cost>[\d,]+\.?\d*)\.\s*" +
+        @"New M-PESA balance is Ksh\s*(?<balance>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    // M-Pesa Global (or similar) receive — foreign currency + Ksh equivalent
+    public static readonly Regex GlobalTransferReceivePattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"You have received (?<currency>[A-Z]{3}) (?<foreign_amount>[\d,]+\.?\d*)\s*" +
+        @"\(Ksh\s*(?<amount>[\d,]+\.?\d*)\) from " +
+        @"(?<name>[A-Za-z][A-Za-z\s]*?) via .*? on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"New M-PESA balance is Ksh\s*(?<balance>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    // GlobalPay virtual card checkout
+    public static readonly Regex GlobalVirtualCardPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh\s*(?<amount>[\d,]+\.?\d*) paid to " +
+        @"(?<name>[A-Za-z0-9][A-Za-z0-9\s\.\-]*?) using M-PESA GlobalPay virtual card ending \*?(?<card_last4>\d{4}) on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"Exch Rate:.*?\.\s*" +
+        @"Fee:\s*Ksh\s*(?<cost>[\d,]+\.?\d*)\.\s*" +
+        @"New M-PESA balance is Ksh\s*(?<balance>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 }
