@@ -707,6 +707,118 @@ public class MpesaSmsParserTests
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // M-Shwari — withdrawal (money leaves M-Shwari, lands in M-PESA)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string MShwariWithdrawalSms =
+        "UHDMK2T7ZU Confirmed.Ksh1,000.00 transferred from M-Shwari account on " +
+        "13/8/26 at 1:09 PM. M-Shwari balance is Ksh2,569.07 .M-PESA balance is " +
+        "Ksh1,031.03 .Transaction cost Ksh.0.00";
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ReturnsCorrectType()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.MShwari, result.Type);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsAmount()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(1000.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsMpesaBalanceNotMShwariBalance()
+    {
+        // BalanceAfterTransaction must be the M-PESA balance (Ksh1,031.03),
+        // not the M-Shwari balance (Ksh2,569.07)
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(1031.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_CounterpartyIsMShwariWithdrawal()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("M-Shwari Withdrawal", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_MShwariWithdrawal_ExtractsMpesaCode()
+    {
+        var result = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("UHDMK2T7ZU", result.MpesaCode);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // M-Shwari — deposit (money leaves M-PESA, lands in M-Shwari)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string MShwariDepositSms =
+        "UHEMK2ZU8L Confirmed.Ksh50.00 transferred to M-Shwari account on " +
+        "14/8/26 at 10:02 PM. M-PESA balance is Ksh811.03 .New M-Shwari saving " +
+        "account balance is Ksh2,619.07. Transaction cost Ksh.0.00";
+
+    [Fact]
+    public void Parse_MShwariDeposit_ReturnsCorrectType()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.MShwari, result.Type);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsAmount()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(50.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsMpesaBalance()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(811.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_CounterpartyIsMShwariDeposit()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("M-Shwari Deposit", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_MShwariDeposit_ExtractsMpesaCode()
+    {
+        var result = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("UHEMK2ZU8L", result.MpesaCode);
+    }
+
+    [Fact]
+    public void Parse_MShwariMessages_DoNotCrossMatchEachOther()
+    {
+        // Regression guard: "from" vs "to" wording must route to distinct patterns
+        var withdrawal = _parser.Parse(MShwariWithdrawalSms, SmsId, SmsTimestamp);
+        var deposit = _parser.Parse(MShwariDepositSms, SmsId, SmsTimestamp);
+
+        Assert.NotNull(withdrawal);
+        Assert.NotNull(deposit);
+        Assert.NotEqual(withdrawal.CounterpartyName, deposit.CounterpartyName);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -741,6 +853,12 @@ public class MpesaSmsParserTests
     [InlineData(
         "UF7MKM7FTT confirmed. Reversal of transaction UF7MK70VIL has been successfully reversed on 7/6/26 at 5:56 PM and Ksh30.00 is credited to your M-PESA account. New M-PESA account balance is Ksh1,956.99.",
         TransactionType.Reversal)]
+    [InlineData(
+        "UHDMK2T7ZU Confirmed.Ksh1,000.00 transferred from M-Shwari account on 13/8/26 at 1:09 PM. M-Shwari balance is Ksh2,569.07 .M-PESA balance is Ksh1,031.03 .Transaction cost Ksh.0.00",
+        TransactionType.MShwari)]
+    [InlineData(
+        "UHEMK2ZU8L Confirmed.Ksh50.00 transferred to M-Shwari account on 14/8/26 at 10:02 PM. M-PESA balance is Ksh811.03 .New M-Shwari saving account balance is Ksh2,619.07. Transaction cost Ksh.0.00",
+        TransactionType.MShwari)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);
