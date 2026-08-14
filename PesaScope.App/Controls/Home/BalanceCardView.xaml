@@ -14,13 +14,33 @@
 
         <VerticalStackLayout Spacing="4">
 
-            <Label
-                Text="NET BALANCE"
-                FontSize="11"
-                FontAttributes="Bold"
-                CharacterSpacing="1.5"
-                TextColor="{AppThemeBinding Light={StaticResource OnPrimaryContainer}, Dark={StaticResource OnPrimaryContainerDark}}"
-                Opacity="0.7"/>
+            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="4" HorizontalOptions="Start">
+                <Label
+                    Grid.Column="0"
+                    Text="NET BALANCE"
+                    FontSize="11"
+                    FontAttributes="Bold"
+                    CharacterSpacing="1.5"
+                    VerticalOptions="Center"
+                    TextColor="{AppThemeBinding Light={StaticResource OnPrimaryContainer}, Dark={StaticResource OnPrimaryContainerDark}}"
+                    Opacity="0.7"/>
+
+                <ImageButton
+                    Grid.Column="1"
+                    Command="{Binding Source={x:Reference this}, Path=ShowHelpCommand}"
+                    BackgroundColor="Transparent"
+                    WidthRequest="20" HeightRequest="20"
+                    Padding="0"
+                    VerticalOptions="Center"
+                    Opacity="0.7">
+                    <ImageButton.Source>
+                        <FontImageSource
+                            FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Info}"
+                            Color="{AppThemeBinding Light={StaticResource OnPrimaryContainer}, Dark={StaticResource OnPrimaryContainerDark}}"
+                            Size="14"/>
+                    </ImageButton.Source>
+                </ImageButton>
+            </Grid>
 
             <Label
                 Text="{Binding Source={x:Reference this}, Path=NetBalance}"

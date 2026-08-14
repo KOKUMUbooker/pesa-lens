@@ -1,3 +1,5 @@
+using System.Windows.Input;
+
 namespace PesaScope.App.Controls.Home;
 
 public partial class BalanceCardView : ContentView
@@ -13,6 +15,9 @@ public partial class BalanceCardView : ContentView
 
     public static readonly BindableProperty MoneyOutProperty =
         BindableProperty.Create(nameof(MoneyOut), typeof(string), typeof(BalanceCardView), "KSh 0");
+
+    public static readonly BindableProperty ShowHelpCommandProperty =
+        BindableProperty.Create(nameof(ShowHelpCommand), typeof(ICommand), typeof(BalanceCardView));
 
     public string NetBalance
     {
@@ -36,6 +41,12 @@ public partial class BalanceCardView : ContentView
     {
         get => (string)GetValue(MoneyOutProperty);
         set => SetValue(MoneyOutProperty, value);
+    }
+
+    public ICommand ShowHelpCommand
+    {
+        get => (ICommand)GetValue(ShowHelpCommandProperty);
+        set => SetValue(ShowHelpCommandProperty, value);
     }
 
     public BalanceCardView()
