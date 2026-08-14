@@ -26,11 +26,15 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         var transaction = TryParseSendMoney(body, smsId, smsTimestamp)
             ?? TryParseReceiveMoney(body, smsId, smsTimestamp)
+            ?? TryParseGlobalTransferSend(body, smsId, smsTimestamp)
+            ?? TryParseGlobalTransferReceive(body, smsId, smsTimestamp)
+            ?? TryParseGlobalVirtualCardPayment(body, smsId, smsTimestamp)
+            ?? TryParseGlobalPaymentCard(body, smsId, smsTimestamp)
+            ?? TryParseDataBundle(body, smsId, smsTimestamp)
             ?? TryParsePayBill(body, smsId, smsTimestamp)
             ?? TryParseBuyGoods(body, smsId, smsTimestamp)
             ?? TryParseWithdrawal(body, smsId, smsTimestamp)
             ?? TryParseAirtime(body, smsId, smsTimestamp)
-            ?? TryParseDataBundle(body, smsId, smsTimestamp)
             ?? TryParseReversal(body, smsId, smsTimestamp)
             ?? TryParseDeposit(body, smsId, smsTimestamp)
             ?? TryParseFuliza(body, smsId, smsTimestamp)
@@ -156,6 +160,45 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         return BuildTransaction(m, TransactionType.MShwari, smsId, timestamp,
             counterpartyName: "M-Shwari Deposit");
+    }
+
+    private static Transaction? TryParseGlobalPaymentCard(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.GlobalPaymentCardPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim(),
+            counterpartyNumber: m.Groups["account"].Value.Trim());
+    }
+
+    private static Transaction? TryParseGlobalTransferSend(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.GlobalTransferSendPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim(),
+            counterpartyNumber: m.Groups["mtcn"].Value.Trim());
+    }
+
+    private static Transaction? TryParseGlobalTransferReceive(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.GlobalTransferReceivePattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim());
+    }
+
+    private static Transaction? TryParseGlobalVirtualCardPayment(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.GlobalVirtualCardPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim(),
+            counterpartyNumber: $"card *{m.Groups["card_last4"].Value}");
     }
 
     // ── Builder ──────────────────────────────────────────────────────────────
