@@ -237,7 +237,7 @@ public partial class SettingsViewModel : ObservableObject
                     transactions.Add(tx);
             }
 
-            int inserted = await _transactionRepo.InsertManyAsync(transactions);
+            var (inserted, duplicates) = await _transactionRepo.InsertManyAsync(transactions);
             await _autoCategorizationService.CategorizeAsync(transactions);
 
             var last = newMessages[^1];
@@ -245,10 +245,12 @@ public partial class SettingsViewModel : ObservableObject
 
             LastSyncedText = FormatSyncTime(DateTime.UtcNow);
 
-            await Shell.Current.DisplayAlertAsync(
-                "Sync Complete",
-                $"Found {inserted} new transaction{(inserted == 1 ? "" : "s")}.",
-                "OK");
+            var message = duplicates > 0
+                ? $"Found {inserted} new transaction{(inserted == 1 ? "" : "s")}. " +
+                  $"Skipped {duplicates} duplicate{(duplicates == 1 ? "" : "s")}."
+                : $"Found {inserted} new transaction{(inserted == 1 ? "" : "s")}.";
+
+            await Shell.Current.DisplayAlertAsync("Sync Complete", message, "OK");
         }
         catch (Exception)
         {

@@ -11,24 +11,38 @@ public class TransactionRepository(DatabaseService databaseService)
                  .Where(t => t.MpesaCode == mpesaCode)
                  .CountAsync() > 0;
 
-    public async Task<int> InsertManyAsync(IEnumerable<Transaction> transactions)
+    public async Task<(int Inserted, int Duplicates)> InsertManyAsync(IEnumerable<Transaction> transactions)
     {
         int inserted = 0;
+        int duplicates = 0;
 
         await _db.RunInTransactionAsync(conn =>
         {
+            var existingCodes = new HashSet<string>(
+                conn.Table<Transaction>().Select(t => t.MpesaCode));
+
             foreach (var tx in transactions)
             {
-                // Skip if this M-Pesa code already exists
-                var existing = conn.Find<Transaction>(tx.MpesaCode);
-                if (existing is not null) continue;
+                if (existingCodes.Contains(tx.MpesaCode))
+                {
+                    duplicates++;
+                    continue;
+                }
 
-                conn.Insert(tx);
-                inserted++;
+                try
+                {
+                    conn.Insert(tx);
+                    existingCodes.Add(tx.MpesaCode);
+                    inserted++;
+                }
+                catch (SQLite.SQLiteException ex) when (ex.Result == SQLite.SQLite3.Result.Constraint)
+                {
+                    duplicates++;
+                }
             }
         });
 
-        return inserted;
+        return (inserted, duplicates);
     }
 
     public Task<List<Transaction>> GetByDateRangeAsync(DateTime from, DateTime to) =>

@@ -106,9 +106,9 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
 
         await SetStatusAsync($"Found {messages.Count} M-Pesa messages. Parsing...");
 
-        int imported = await ParseAndImportAsync(messages);
+        var (imported, duplicates) = await ParseAndImportAsync(messages);
 
-        await FinishAsync(importedCount: imported, wasHistorical: true);
+        await FinishAsync(importedCount: imported, wasHistorical: true, duplicateCount: duplicates);
     }
 
     // ── Skipped path (user chose not to set as default) ───────────────────────
@@ -127,8 +127,7 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
     }
 
     // ── Parse + insert ────────────────────────────────────────────────────────
-
-    private async Task<int> ParseAndImportAsync(
+    private async Task<(int Inserted, int Duplicates)> ParseAndImportAsync(
         List<PesaScope.App.Services.Interfaces.SmsMessage> messages)
     {
         var transactions = new List<Transaction>();
@@ -142,7 +141,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
             if (tx is not null)
                 transactions.Add(tx);
 
-            // Batch UI updates every 10 messages to avoid flooding the main thread
             if (i % 10 == 0 || i == total - 1)
             {
                 double progress = (double)(i + 1) / total;
@@ -159,9 +157,8 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
 
         await SetStatusAsync("Saving to your device...");
 
-        int inserted = await _transactionRepo.InsertManyAsync(transactions);
+        var (inserted, duplicates) = await _transactionRepo.InsertManyAsync(transactions);
 
-        // ── Auto-categorize after bulk insert ────────────────────────────
         await SetStatusAsync("Categorizing transactions...");
         await _autoCategorizationService.CategorizeAsync(transactions);
 
@@ -171,14 +168,18 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
             await _syncMetadataRepo.UpdateAfterSyncAsync(last.SmsId, last.Timestamp, inserted);
         }
 
-        return inserted;
+        return (inserted, duplicates);
     }
 
     // ── Completion ────────────────────────────────────────────────────────────
-
-    private async Task FinishAsync(int importedCount, bool wasHistorical, bool noMessages = false, bool showRestoreCard = false)
+    private async Task FinishAsync(
+        int importedCount,
+        bool wasHistorical,
+        bool noMessages = false,
+        bool showRestoreCard = false,
+        int duplicateCount = 0)
     {
-        await MainThread.InvokeOnMainThreadAsync(async() =>
+        await MainThread.InvokeOnMainThreadAsync(async () =>
         {
             ImportProgressBar.Progress = 1.0;
 
@@ -207,19 +208,19 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
                 StatusIcon.Text = "✅";
                 TitleLabel.Text = "Import Complete!";
                 SubtitleLabel.Text = "Your M-Pesa history is ready.";
-                StatusLabel.Text =
-                    $"Successfully imported {importedCount} " +
-                    $"transaction{(importedCount == 1 ? "" : "s")}.";
+                StatusLabel.Text = duplicateCount > 0
+                    ? $"Successfully imported {importedCount} " +
+                      $"transaction{(importedCount == 1 ? "" : "s")}. " +
+                      $"Skipped {duplicateCount} duplicate{(duplicateCount == 1 ? "" : "s")}."
+                    : $"Successfully imported {importedCount} " +
+                      $"transaction{(importedCount == 1 ? "" : "s")}.";
                 CountLabel.Text =
                     $"{importedCount} transaction{(importedCount == 1 ? "" : "s")} imported";
             }
 
-            // Show restore card whenever PesaScope was set as default,
-            // even if the inbox was empty — it's still the default app.
             if (wasHistorical || showRestoreCard)
                 RestoreDefaultCard.IsVisible = true;
 
-            // Mark import flag as done
             var settings = await _appSettingsRepo.GetAsync();
             settings.ImportComplete = true;
             await _appSettingsRepo.UpdateAsync(settings);
