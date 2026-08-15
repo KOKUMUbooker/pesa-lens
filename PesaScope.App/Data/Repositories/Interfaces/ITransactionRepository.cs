@@ -14,7 +14,7 @@ public interface ITransactionRepository : IRepository<Transaction>
     /// Bulk insert a list of transactions. Skips any whose MpesaCode already exists.
     /// Returns the count of newly inserted transactions.
     /// </summary>
-    Task<int> InsertManyAsync(IEnumerable<Transaction> transactions);
+    Task<(int Inserted, int Duplicates)> InsertManyAsync(IEnumerable<Transaction> transactions);
 
     /// <summary>
     /// Returns all transactions within the given date range, newest first.
