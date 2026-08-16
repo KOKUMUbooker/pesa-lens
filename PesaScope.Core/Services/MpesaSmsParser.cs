@@ -26,6 +26,7 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         var transaction = TryParseSendMoney(body, smsId, smsTimestamp)
             ?? TryParseReceiveMoney(body, smsId, smsTimestamp)
+            ?? TryParsePochiLaBiashara(body, smsId, smsTimestamp)
             ?? TryParseGlobalTransferSend(body, smsId, smsTimestamp)
             ?? TryParseGlobalTransferReceive(body, smsId, smsTimestamp)
             ?? TryParseGlobalVirtualCardPayment(body, smsId, smsTimestamp)
@@ -113,8 +114,13 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.DataBundlePattern.Match(body);
         if (!m.Success) return null;
 
+        var counterpartyName = m.Groups["bundle_type"].Value.Equals("POSTPAID", StringComparison.OrdinalIgnoreCase)
+            ? "Safaricom Postpaid Bundles"
+            : "Safaricom Data Bundles";
+
         return BuildTransaction(m, TransactionType.AirtimePurchase, smsId, timestamp,
-            counterpartyName: "Safaricom Data Bundles");
+            counterpartyName: counterpartyName,
+            counterpartyNumber: m.Groups["account"].Value.Trim());
     }
 
     private static Transaction? TryParseReversal(string body, long smsId, long timestamp)
@@ -133,6 +139,15 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         return BuildTransaction(m, TransactionType.Deposit, smsId, timestamp,
             counterpartyName: "M-PESA Deposit");
+    }
+
+    private static Transaction? TryParsePochiLaBiashara(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.PochiLaBiasharaPattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.PochiLaBiashara, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim());
     }
 
     private static Transaction? TryParseFuliza(string body, long smsId, long timestamp)

@@ -986,10 +986,138 @@ public class MpesaSmsParserTests
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // Pochi la Biashara
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string PochiLaBiasharaSms =
+        "UHFMK33A7G Confirmed. Ksh30.00 sent to JOYCE LYNN on 15/8/26 at 7:19 PM. " +
+        "New M-PESA balance is Ksh661.03. Transaction cost, Ksh0.00. " +
+        "Amount you can transact within the day is 499,850.00.";
+
+    [Fact]
+    public void Parse_PochiLaBiashara_ReturnsCorrectType()
+    {
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.PochiLaBiashara, result.Type);
+    }
+
+    [Fact]
+    public void Parse_PochiLaBiashara_ExtractsAmount()
+    {
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(30.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_PochiLaBiashara_ExtractsRecipientName()
+    {
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("JOYCE LYNN", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_PochiLaBiashara_ExtractsBalance()
+    {
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(661.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_PochiLaBiashara_ExtractsMpesaCode()
+    {
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("UHFMK33A7G", result.MpesaCode);
+    }
+
+    [Fact]
+    public void Parse_PochiLaBiashara_DoesNotMatchAsSendMoney()
+    {
+        // Regression guard: absence of a phone number after the name must route
+        // here, not fall through to SendMoneyPattern (which requires one).
+        var result = _parser.Parse(PochiLaBiasharaSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Null(result.CounterpartyNumber);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Data Bundle — Postpaid variant
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private const string PostpaidDataBundleSms =
+        "UHGMK34OTS Confirmed. Ksh20.00 sent to SAFARICOM POSTPAID BUNDLES for " +
+        "account Data Daily on 16/8/26 at 9:24 AM. New M-PESA balance is " +
+        "Ksh621.03. Transaction cost, Ksh0.00.";
+
+    [Fact]
+    public void Parse_PostpaidDataBundle_ReturnsAirtimeType()
+    {
+        var result = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.AirtimePurchase, result.Type);
+    }
+
+    [Fact]
+    public void Parse_PostpaidDataBundle_ExtractsAmount()
+    {
+        var result = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(20.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_PostpaidDataBundle_CounterpartyIsSafaricomPostpaidBundles()
+    {
+        var result = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("Safaricom Postpaid Bundles", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_PostpaidDataBundle_ExtractsAccountAsCounterpartyNumber()
+    {
+        var result = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("Data Daily", result.CounterpartyNumber);
+    }
+
+    [Fact]
+    public void Parse_PostpaidDataBundle_ExtractsBalance()
+    {
+        var result = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(621.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_DataBundleVariants_BothResolveToAirtimeType_ButDifferentNames()
+    {
+        // Regression guard: prepaid and postpaid must not collapse into
+        // the same counterparty name after the pattern generalization.
+        var prepaid = _parser.Parse(DataBundleSms, SmsId, SmsTimestamp);
+        var postpaid = _parser.Parse(PostpaidDataBundleSms, SmsId, SmsTimestamp);
+
+        Assert.NotNull(prepaid);
+        Assert.NotNull(postpaid);
+        Assert.Equal(TransactionType.AirtimePurchase, prepaid.Type);
+        Assert.Equal(TransactionType.AirtimePurchase, postpaid.Type);
+        Assert.NotEqual(prepaid.CounterpartyName, postpaid.CounterpartyName);
+    }
+    // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
 
     [Theory]
+    [InlineData(
+        "UHFMK33A7G Confirmed. Ksh30.00 sent to JOYCE LYNN on 15/8/26 at 7:19 PM. New M-PESA balance is Ksh661.03. Transaction cost, Ksh0.00.",
+        TransactionType.PochiLaBiashara)]
+    [InlineData(
+        "UHGMK34OTS Confirmed. Ksh20.00 sent to SAFARICOM POSTPAID BUNDLES for account Data Daily on 16/8/26 at 9:24 AM. New M-PESA balance is Ksh621.03. Transaction cost, Ksh0.00.",
+        TransactionType.AirtimePurchase)]
     [InlineData(
         "UF7K26WRWG Confirmed. Ksh5.00 sent to Booker Okumu 0712345678 on 7/6/26 at 4:36 PM. New M-PESA balance is Ksh0.00. Transaction cost, Ksh0.00.",
         TransactionType.SendMoney)]
