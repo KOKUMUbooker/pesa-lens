@@ -103,6 +103,15 @@ public static class ParserPatterns
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
+    public static readonly Regex PochiLaBiasharaPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
+        @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
+        @"(?<name>[A-Za-z][A-Za-z\s]*?) on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\." +
+        @"\s*New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
+        @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
     public static readonly Regex MShwariWithdrawalPattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
         @"Ksh(?<amount>[\d,]+\.?\d*) transferred from M-Shwari account on\s*" +
