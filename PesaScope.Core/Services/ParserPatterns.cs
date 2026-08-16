@@ -73,7 +73,9 @@ public static class ParserPatterns
 
     public static readonly Regex DataBundlePattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
-        @"Ksh(?<amount>[\d,]+\.?\d*) sent to SAFARICOM DATA BUNDLES for account SAFARICOM DATA BUNDLES on " +
+        @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
+        @"SAFARICOM\s+(?<bundle_type>DATA|POSTPAID)\s+BUNDLES for account " +
+        @"(?<account>[A-Za-z0-9\s]+?) on " +
         @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\." +
         @"\s*New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
         @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",

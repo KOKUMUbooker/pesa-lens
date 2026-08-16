@@ -114,8 +114,13 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.DataBundlePattern.Match(body);
         if (!m.Success) return null;
 
+        var counterpartyName = m.Groups["bundle_type"].Value.Equals("POSTPAID", StringComparison.OrdinalIgnoreCase)
+            ? "Safaricom Postpaid Bundles"
+            : "Safaricom Data Bundles";
+
         return BuildTransaction(m, TransactionType.AirtimePurchase, smsId, timestamp,
-            counterpartyName: "Safaricom Data Bundles");
+            counterpartyName: counterpartyName,
+            counterpartyNumber: m.Groups["account"].Value.Trim());
     }
 
     private static Transaction? TryParseReversal(string body, long smsId, long timestamp)
