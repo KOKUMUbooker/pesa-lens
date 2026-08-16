@@ -72,6 +72,36 @@ public class AutoCategorizationRuleRepository(DatabaseService databaseService)
 
             // Income
             (RuleType.TransactionType, "ReceiveMoney", "Income", 5),
+
+            // Software & Dev Tools
+            (RuleType.ContainsText, "DIGITALOCEA", "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "GITHUB",      "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "AWS",         "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "AMAZON WEB",  "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "GOOGLE CLOUD","Software & Dev Tools", 9),
+            (RuleType.ContainsText, "MICROSOFT AZURE", "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "VERCEL",      "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "NETLIFY",     "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "RENDER",      "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "NAMECHEAP",   "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "GODADDY",     "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "JETBRAINS",   "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "OPENAI",      "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "ANTHROPIC",   "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "CLAUDE.AI",   "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "OPENROUTER",  "Software & Dev Tools", 9),
+            (RuleType.ContainsText, "SUPABASE",    "Software & Dev Tools", 9),
+
+            // Entertainment — streaming via GlobalPay virtual card
+            (RuleType.ContainsText, "NETFLIX",       "Entertainment", 9),
+            (RuleType.ContainsText, "SPOTIFY",       "Entertainment", 9),
+            (RuleType.ContainsText, "YOUTUBE",       "Entertainment", 9),
+            (RuleType.ContainsText, "APPLE TV",      "Entertainment", 9),
+            (RuleType.ContainsText, "AMAZON PRIME",  "Entertainment", 9),
+            (RuleType.ContainsText, "DISNEY",        "Entertainment", 9),
+            (RuleType.ContainsText, "SHOWMAX",       "Entertainment", 9),
+            (RuleType.ContainsText, "DSTV",          "Entertainment", 9),
+            (RuleType.ContainsText, "GOTV",          "Entertainment", 9),
         };
 
         foreach (var (type, value, categoryName, priority) in defaults)
