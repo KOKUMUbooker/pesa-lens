@@ -107,7 +107,7 @@ public static class ParserPatterns
 
     public static readonly Regex PochiLaBiasharaPattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
-        @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
+        @"Ksh(?<amount>[\d,]+\.?\d*) sent to (?!.*for account)" +
         @"(?<name>[A-Za-z][A-Za-z\s]*?) on " +
         @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\." +
         @"\s*New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
@@ -136,7 +136,7 @@ public static class ParserPatterns
     public static readonly Regex GlobalPaymentCardPattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
         @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
-        @"(?<name>[A-Z0-9\s&'\-\.]+?) for account " +
+        @"(?<name>M-PESA CARD) for account " +
         @"(?<account>[A-Z0-9\*\s]+?) on " +
         @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\s*" +
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
