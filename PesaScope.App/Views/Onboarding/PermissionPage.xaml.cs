@@ -63,7 +63,7 @@ public partial class PermissionPage : UraniumUI.Pages.UraniumContentPage
             ShowDeniedBanner(
                 title: "Permission denied",
                 message: "PesaScope cannot capture new M-Pesa transactions without this. " +
-                         "Tap Try Again or go to Settings → Apps → PesaScope → Permissions → SMS.");
+                         "Tap Try Again or go to Settings -> Apps -> PesaScope -> Permissions -> SMS.");
             PrimaryButton.Text = "Try Again";
         }
     }
@@ -106,8 +106,8 @@ public partial class PermissionPage : UraniumUI.Pages.UraniumContentPage
 
         // Fire the system role-request dialog.
         // Result comes back via MainActivity.OnActivityResult
-        // → SmsRoleActivityResultHelper.NotifyResult
-        // → OnRoleRequestCompleted (subscribed above)
+        // -> SmsRoleActivityResultHelper.NotifyResult
+        // -> OnRoleRequestCompleted (subscribed above)
         var intent = roleManager.CreateRequestRoleIntent(RoleManager.RoleSms);
         activity.StartActivityForResult(intent, SmsRoleActivityResultHelper.RequestCode);
 

@@ -25,7 +25,7 @@ public class IntIsNonZeroConverter : IValueConverter
         throw new NotSupportedException();
 }
 
-// ── Transaction type → display ────────────────────────────────────────────────
+// ── Transaction type -> display ────────────────────────────────────────────────
 
 /// <summary>Maps a TransactionType to a simple emoji used as an icon in the transaction row.</summary>
 public class TransactionTypeToEmojiConverter : IValueConverter
@@ -71,7 +71,7 @@ public class TransactionTypeToSignConverter : IValueConverter
 
 /// <summary>
 /// Maps a TransactionType to a MAUI Color for the amount label.
-/// Incoming → Primary (green); outgoing → Tertiary (red-orange).
+/// Incoming -> Primary (green); outgoing -> Tertiary (red-orange).
 /// Falls back to OnSurface for unknown types.
 /// </summary>
 public class TransactionTypeToColorConverter : IValueConverter

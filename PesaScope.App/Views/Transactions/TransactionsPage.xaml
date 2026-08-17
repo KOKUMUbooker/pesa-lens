@@ -462,7 +462,7 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <Label Grid.Column="1" Text="→" FontSize="18"
+                    <Label Grid.Column="1" Text="->" FontSize="18"
                         VerticalOptions="End" Margin="0,0,0,8"
                         TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
 

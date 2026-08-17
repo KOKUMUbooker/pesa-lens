@@ -207,7 +207,7 @@ public partial class BudgetHistoryViewModel : ObservableObject
 
     private async Task<(int year, int month)?> GetLatestSnapshotMonthAsync()
     {
-        // Walk months 12→1 on the most recent year to find the latest
+        // Walk months 12->1 on the most recent year to find the latest
         // month that has an overall snapshot row
         if (AvailableYears.Count == 0) return null;
 

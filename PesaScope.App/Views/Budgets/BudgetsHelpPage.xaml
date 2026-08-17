@@ -85,7 +85,7 @@
             <VerticalStackLayout Spacing="6">
                 <Label Text="Notifications" FontSize="17" FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                <Label Text="Budget notifications have a master switch under Settings → Budget Notifications. That switch must be on for any warning or exceeded alerts to fire, for both the overall budget and every category budget. Each category budget also has its own on/off toggle in its edit sheet, so you can silence individual categories while keeping others active."
+                <Label Text="Budget notifications have a master switch under Settings -> Budget Notifications. That switch must be on for any warning or exceeded alerts to fire, for both the overall budget and every category budget. Each category budget also has its own on/off toggle in its edit sheet, so you can silence individual categories while keeping others active."
                        FontSize="14" LineHeight="1.3"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
             </VerticalStackLayout>
