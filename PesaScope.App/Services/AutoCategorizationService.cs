@@ -84,6 +84,9 @@ public class AutoCategorizationService : IAutoCategorizationService
             RuleType.TransactionType =>
                 tx.Type.ToString().Equals(rule.MatchValue, StringComparison.OrdinalIgnoreCase),
 
+            RuleType.Direction =>
+                tx.Direction.ToString().Equals(rule.MatchValue, StringComparison.OrdinalIgnoreCase),
+
             _ => false
         };
 }
