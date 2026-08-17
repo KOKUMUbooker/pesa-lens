@@ -201,6 +201,13 @@ public class MpesaSmsReceiver : BroadcastReceiver
             TransactionType.Deposit => $"Deposited KES {amount}",
             TransactionType.Fuliza => $"Fuliza KES {amount}",
             TransactionType.Reversal => $"Reversal KES {amount}",
+            TransactionType.PochiLaBiashara => $"Pochi La Biashara KES {amount} to {counterparty}",
+            TransactionType.MShwari => transaction.Direction == TransactionDirection.Incoming
+                ? $"M-Shwari withdrawal KES {amount}"
+                : $"M-Shwari deposit KES {amount}",
+            TransactionType.GlobalPayment => transaction.Direction == TransactionDirection.Incoming
+                ? $"Received KES {amount} from {counterparty} (Global)"
+                : $"Paid KES {amount} to {counterparty} (Global)",
             _ => $"M-Pesa KES {amount}",
         };
 
