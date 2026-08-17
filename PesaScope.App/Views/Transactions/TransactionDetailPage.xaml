@@ -232,12 +232,24 @@
                     <Grid Padding="16,14" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <VerticalStackLayout Grid.Column="0" Spacing="2">
                             <Label Text="Transaction code" FontSize="12"
-                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                             <Label Text="{Binding Transaction.MpesaCode}"
-                                   FontSize="15" FontAttributes="Bold"
-                                   FontFamily="OpenSansRegular"
-                                   TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                               FontSize="15" FontAttributes="Bold"
+                               FontFamily="OpenSansRegular"
+                               TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
                         </VerticalStackLayout>
+                        <ImageButton Grid.Column="1"
+                             Command="{Binding CopyMpesaCodeCommand}"
+                             BackgroundColor="Transparent" Padding="6"
+                             WidthRequest="32" HeightRequest="32"
+                             VerticalOptions="Center">
+                            <ImageButton.Source>
+                                <FontImageSource
+                                   FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Content_copy}"
+                                   Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                   Size="18" />
+                            </ImageButton.Source>
+                        </ImageButton>
                     </Grid>
 
                     <BoxView HeightRequest="1" Margin="16,0"

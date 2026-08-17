@@ -39,8 +39,7 @@ public partial class TransactionDetailViewModel : ObservableObject
         ? string.Empty
         : $"Ksh {Transaction.BalanceAfterTransaction:N0}";
 
-    public bool IsCredit => Transaction?.Type is
-        TransactionType.ReceiveMoney or TransactionType.Deposit or TransactionType.Reversal;
+    public bool IsCredit => Transaction?.Direction == TransactionDirection.Incoming;
 
     public Color AmountColor => IsCredit
         ? Color.FromArgb("#1A8C62")
@@ -158,5 +157,14 @@ public partial class TransactionDetailViewModel : ObservableObject
             return;
 
         await Clipboard.Default.SetTextAsync(Transaction.OriginalSms);
+    }
+
+    [RelayCommand]
+    public async Task CopyMpesaCodeAsync()
+    {
+        if (Transaction is null || string.IsNullOrWhiteSpace(Transaction.MpesaCode))
+            return;
+
+        await Clipboard.Default.SetTextAsync(Transaction.MpesaCode);
     }
 }
