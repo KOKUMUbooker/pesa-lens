@@ -206,24 +206,24 @@
 
                 <!-- Empty state -->
                 <VerticalStackLayout
-                IsVisible="{Binding IsEmpty}"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                Spacing="12"
-                Padding="40">
+                    IsVisible="{Binding IsEmpty}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Spacing="12"
+                    Padding="40">
                     <Label Text="🔍" FontSize="48" HorizontalOptions="Center" />
                     <Label
-                    Text="No transactions found"
-                    FontSize="17"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center"
-                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
+                        Text="No transactions found"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
                     <Label
-                    Text="Try adjusting your filters or date range."
-                    FontSize="13"
-                    HorizontalTextAlignment="Center"
-                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                </VerticalStackLayout>
+                        Text="Try adjusting your filters or date range, or sync from Settings."
+                        FontSize="13"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
+            </VerticalStackLayout>
 
             <RefreshView
                 Command="{Binding LoadCommand}"
