@@ -54,7 +54,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.SendMoneyPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.SendMoney, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.SendMoney, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: m.Groups["phone"].Value.Trim());
     }
@@ -64,7 +64,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.ReceiveMoneyPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.ReceiveMoney, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.ReceiveMoney, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: m.Groups["phone"].Value.Trim());
     }
@@ -74,7 +74,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.PayBillPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.PayBill, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.PayBill, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: m.Groups["account"].Value.Trim());
     }
@@ -84,7 +84,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.BuyGoodsPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.BuyGoods, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.BuyGoods, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim());
     }
 
@@ -96,7 +96,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var agentName = m.Groups["agent"].Value.Trim();
         var location = m.Groups["location"].Value.Trim();
 
-        return BuildTransaction(m, TransactionType.Withdrawal, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.Withdrawal, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: $"{agentName} - {location}");
     }
 
@@ -105,7 +105,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.AirtimePattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.AirtimePurchase, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.AirtimePurchase, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: "Safaricom Airtime");
     }
 
@@ -118,7 +118,7 @@ public class MpesaSmsParser : IMpesaSmsParser
             ? "Safaricom Postpaid Bundles"
             : "Safaricom Data Bundles";
 
-        return BuildTransaction(m, TransactionType.AirtimePurchase, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.AirtimePurchase, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: counterpartyName,
             counterpartyNumber: m.Groups["account"].Value.Trim());
     }
@@ -128,7 +128,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.ReversalPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.Reversal, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.Reversal, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: "M-PESA Reversal");
     }
 
@@ -137,7 +137,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.DepositPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.Deposit, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.Deposit, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: "M-PESA Deposit");
     }
 
@@ -146,7 +146,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.PochiLaBiasharaPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.PochiLaBiashara, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.PochiLaBiashara, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim());
     }
 
@@ -155,7 +155,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.FulizaPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.Fuliza, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.Fuliza, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: "Fuliza M-PESA");
     }
 
@@ -164,7 +164,8 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.MShwariWithdrawalPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.MShwari, smsId, timestamp,
+        // Money moving M-Shwari → M-Pesa is incoming to the M-Pesa balance
+        return BuildTransaction(m, TransactionType.MShwari, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: "M-Shwari Withdrawal");
     }
 
@@ -173,7 +174,8 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.MShwariDepositPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.MShwari, smsId, timestamp,
+        // Money moving M-Pesa → M-Shwari is outgoing from the M-Pesa balance
+        return BuildTransaction(m, TransactionType.MShwari, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: "M-Shwari Deposit");
     }
 
@@ -182,7 +184,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.GlobalPaymentCardPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.GlobalPayment, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: m.Groups["account"].Value.Trim());
     }
@@ -192,7 +194,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.GlobalTransferSendPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.GlobalPayment, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: m.Groups["mtcn"].Value.Trim());
     }
@@ -202,7 +204,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.GlobalTransferReceivePattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.GlobalPayment, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim());
     }
 
@@ -211,7 +213,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         var m = ParserPatterns.GlobalVirtualCardPattern.Match(body);
         if (!m.Success) return null;
 
-        return BuildTransaction(m, TransactionType.GlobalPayment, smsId, timestamp,
+        return BuildTransaction(m, TransactionType.GlobalPayment, TransactionDirection.Outgoing, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim(),
             counterpartyNumber: $"card *{m.Groups["card_last4"].Value}");
     }
@@ -221,6 +223,7 @@ public class MpesaSmsParser : IMpesaSmsParser
     private static Transaction BuildTransaction(
         Match match,
         TransactionType type,
+        TransactionDirection direction,
         long smsId,
         long smsTimestamp,
         string counterpartyName = "",
@@ -230,6 +233,7 @@ public class MpesaSmsParser : IMpesaSmsParser
         {
             MpesaCode = match.Groups["code"].Value.ToUpperInvariant(),
             Type = type,
+            Direction = direction,
             Amount = ParseAmount(match.Groups["amount"].Value),
             BalanceAfterTransaction = ParseAmount(match.Groups["balance"].Value),
             CounterpartyName = counterpartyName,
