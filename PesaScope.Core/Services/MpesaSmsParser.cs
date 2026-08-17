@@ -26,7 +26,9 @@ public class MpesaSmsParser : IMpesaSmsParser
 
         var transaction = TryParseSendMoney(body, smsId, smsTimestamp)
             ?? TryParseReceiveMoney(body, smsId, smsTimestamp)
+            ?? TryParseBankTransferReceive(body, smsId, smsTimestamp)
             ?? TryParsePochiLaBiashara(body, smsId, smsTimestamp)
+            ?? TryParsePochiReceive(body, smsId, smsTimestamp)
             ?? TryParseGlobalTransferSend(body, smsId, smsTimestamp)
             ?? TryParseGlobalTransferReceive(body, smsId, smsTimestamp)
             ?? TryParseGlobalVirtualCardPayment(body, smsId, smsTimestamp)
@@ -147,6 +149,24 @@ public class MpesaSmsParser : IMpesaSmsParser
         if (!m.Success) return null;
 
         return BuildTransaction(m, TransactionType.PochiLaBiashara, TransactionDirection.Outgoing, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim());
+    }
+
+    private static Transaction? TryParsePochiReceive(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.PochiReceivePattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.PochiLaBiashara, TransactionDirection.Incoming, smsId, timestamp,
+            counterpartyName: m.Groups["name"].Value.Trim());
+    }
+
+    private static Transaction? TryParseBankTransferReceive(string body, long smsId, long timestamp)
+    {
+        var m = ParserPatterns.BankTransferReceivePattern.Match(body);
+        if (!m.Success) return null;
+
+        return BuildTransaction(m, TransactionType.ReceiveMoney, TransactionDirection.Incoming, smsId, timestamp,
             counterpartyName: m.Groups["name"].Value.Trim());
     }
 
