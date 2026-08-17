@@ -94,8 +94,8 @@ public partial class EditCategoryViewModel : ObservableObject, IQueryAttributabl
     }
 
     // ── IQueryAttributable ────────────────────────────────────────────────────
-    // Navigation: GoToAsync("EditCategoryPage?categoryId=5")  → edit mode
-    //             GoToAsync("EditCategoryPage")               → add mode
+    // Navigation: GoToAsync("EditCategoryPage?categoryId=5")  -> edit mode
+    //             GoToAsync("EditCategoryPage")               -> add mode
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.TryGetValue("categoryId", out var raw) && int.TryParse(raw?.ToString(), out var id))

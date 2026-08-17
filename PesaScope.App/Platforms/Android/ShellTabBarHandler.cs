@@ -66,7 +66,7 @@ public class PesaLensBottomNavTracker : IShellBottomNavViewAppearanceTracker
         var states = new int[][]
         {
             new[] {  global::Android.Resource.Attribute.StateChecked },   // selected
-            new[] {  -global::Android.Resource.Attribute.StateChecked },   // unselected (Negative → the attribute must NOT be active for this row to match)
+            new[] {  -global::Android.Resource.Attribute.StateChecked },   // unselected (Negative -> the attribute must NOT be active for this row to match)
         };
 
         var colors = new int[]

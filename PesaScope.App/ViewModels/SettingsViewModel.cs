@@ -294,7 +294,7 @@ public partial class SettingsViewModel : ObservableObject
     public async Task CopyVersionInfoAsync()
     {
         await Clipboard.Default.SetTextAsync(AppVersion);
-        await Shell.Current.DisplayAlertAsync("Copied", "Version info copied to clipboard.", "OK");
+        //await Shell.Current.DisplayAlertAsync("Copied", "Version info copied to clipboard.", "OK");
     }
 
     [RelayCommand]

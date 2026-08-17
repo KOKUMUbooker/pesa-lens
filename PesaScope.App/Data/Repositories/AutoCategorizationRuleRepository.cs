@@ -70,8 +70,9 @@ public class AutoCategorizationRuleRepository(DatabaseService databaseService)
             (RuleType.ContainsText, "JAVA",      "Food & Groceries", 8),
             (RuleType.ContainsText, "KFC",       "Food & Groceries", 8),
 
-            // Income
-            (RuleType.TransactionType, "ReceiveMoney", "Income", 5),
+            // Income — anything incoming, unless a more specific rule (e.g. Netflix,
+            // GitHub) already claimed it at a higher priority
+            (RuleType.Direction, "Incoming", "Income", 5),
 
             // Software & Dev Tools
             (RuleType.ContainsText, "DIGITALOCEA", "Software & Dev Tools", 9),

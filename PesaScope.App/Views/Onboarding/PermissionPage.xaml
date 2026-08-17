@@ -285,7 +285,7 @@
                     <!-- Skip option -->
                     <Label
                         x:Name="SkipImportLabel"
-                        Text="Skip history import →"
+                        Text="Skip history import ->"
                         FontSize="13"
                         HorizontalOptions="Center"
                         TextDecorations="Underline"
@@ -328,7 +328,7 @@
                         FontSize="14" FontAttributes="Bold"
                         TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}" />
                     <Label x:Name="DeniedMessage"
-                        Text="PesaScope cannot capture new transactions without this. Tap Try Again or go to Settings → Apps → PesaScope → Permissions."
+                        Text="PesaScope cannot capture new transactions without this. Tap Try Again or go to Settings -> Apps -> PesaScope -> Permissions."
                         FontSize="13" LineHeight="1.4"
                         TextColor="{AppThemeBinding Light={StaticResource OnErrorContainer}, Dark={StaticResource OnErrorContainerDark}}" />
                 </VerticalStackLayout>

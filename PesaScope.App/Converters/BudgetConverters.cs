@@ -84,9 +84,9 @@ public class HexToColorConverter : IValueConverter
 // light/dark theming is respected automatically.
 //
 // StatusKey values:
-//   "over"  → Error   (red)
-//   "warn"  → Secondary (amber)
-//   "ok"    → Primary (green)
+//   "over"  -> Error   (red)
+//   "warn"  -> Secondary (amber)
+//   "ok"    -> Primary (green)
 // </summary>
 public class BudgetStatusToColorConverter : IValueConverter
 {

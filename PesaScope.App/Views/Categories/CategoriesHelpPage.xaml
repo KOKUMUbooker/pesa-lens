@@ -101,27 +101,39 @@
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
 
                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,12">
-                    <VerticalStackLayout Spacing="10">
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="Contains Text" FontSize="14" FontAttributes="Bold"
-                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                            <Label Text="Matches if the transaction description contains this text anywhere — e.g. 'NAIVAS' or 'UBER'." FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,12">
+                        <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Contains Text" FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="Matches if the transaction description contains this text anywhere — e.g. 'NAIVAS' or 'UBER'." FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Paybill Number" FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="Matches transactions to a specific paybill, e.g. 888880 for KPLC Prepaid." FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Till Number" FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="Matches transactions to a specific Buy Goods till number." FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Transaction Type" FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="Matches an entire kind of transaction, e.g. all Airtime Purchases or all Received Money." FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Direction" FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="Matches whether money came in or went out — useful as a catch-all, e.g. filing anything incoming under 'Income' even if no other rule claims it first." FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            </VerticalStackLayout>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="Paybill Number" FontSize="14" FontAttributes="Bold"
-                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                            <Label Text="Matches transactions to a specific paybill, e.g. 888880 for KPLC Prepaid." FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="Transaction Type" FontSize="14" FontAttributes="Bold"
-                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                            <Label Text="Matches an entire kind of transaction, e.g. all Airtime Purchases or all Received Money." FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                        </VerticalStackLayout>
-                    </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
 

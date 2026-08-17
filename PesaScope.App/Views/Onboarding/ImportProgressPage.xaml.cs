@@ -18,8 +18,8 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
 
     /// <summary>
     /// Set by PermissionPage before navigating here.
-    /// True  → user set PesaScope as default; we can bulk-import history.
-    /// False → user skipped; we only capture future transactions.
+    /// True  -> user set PesaScope as default; we can bulk-import history.
+    /// False -> user skipped; we only capture future transactions.
     /// </summary>
     public bool HistoricalImportEnabled { get; set; }
 
@@ -200,7 +200,7 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
                 SubtitleLabel.Text =
                     "PesaScope will automatically capture new M-Pesa transactions as they arrive.";
                 StatusLabel.Text =
-                    "Tip: you can import your history later from Settings → Sync.";
+                    "Tip: you can import your history later from Settings -> Sync.";
                 CountLabel.IsVisible = false;
             }
             else
