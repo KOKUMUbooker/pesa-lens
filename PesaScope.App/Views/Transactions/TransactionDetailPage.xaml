@@ -290,6 +290,16 @@
                         </Border>
                     </Grid>
 
+                    <!-- Uncategorized hint -->
+                    <Border Padding="16,10"
+                        IsVisible="{Binding SelectedCategory.Name, Converter={StaticResource IsEqualConverter}, ConverterParameter='Uncategorized'}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}">
+                        <Label FontSize="12.5" LineBreakMode="WordWrap"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}">
+                            <Label.Text>You can create a rule on the Categories screen so transactions like this are categorized automatically next time.</Label.Text>
+                        </Label>
+                    </Border>
+
                 </VerticalStackLayout>
             </Border>
 
