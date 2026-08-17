@@ -101,34 +101,19 @@ public class TransactionRepository(DatabaseService databaseService)
 
     public async Task<decimal> GetTotalSpentAsync(DateTime from, DateTime to)
     {
-        var outgoingTypes = new[]
-        {
-            TransactionType.SendMoney,
-            TransactionType.PayBill,
-            TransactionType.BuyGoods,
-            TransactionType.AirtimePurchase,
-            TransactionType.Withdrawal,
-            TransactionType.Fuliza,
-            TransactionType.MShwari
-        };
-
         var transactions = await _db.Table<Transaction>()
-            .Where(t => t.TransactionDate >= from && t.TransactionDate <= to)
+            .Where(t => t.TransactionDate >= from && t.TransactionDate <= to
+                     && t.Direction == TransactionDirection.Outgoing)
             .ToListAsync();
-
-        return transactions
-            .Where(t => outgoingTypes.Contains(t.Type))
-            .Sum(t => t.Amount);
+        return transactions.Sum(t => t.Amount);
     }
 
     public async Task<decimal> GetTotalReceivedAsync(DateTime from, DateTime to)
     {
         var transactions = await _db.Table<Transaction>()
-            .Where(t => t.TransactionDate >= from
-                     && t.TransactionDate <= to
-                     && t.Type == TransactionType.ReceiveMoney)
+            .Where(t => t.TransactionDate >= from && t.TransactionDate <= to
+                     && t.Direction == TransactionDirection.Incoming)
             .ToListAsync();
-
         return transactions.Sum(t => t.Amount);
     }
 

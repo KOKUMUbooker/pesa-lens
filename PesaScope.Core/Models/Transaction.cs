@@ -21,6 +21,10 @@ public class Transaction
     public TransactionType Type { get; set; }
 
     [NotNull]
+    [Column("direction")] 
+    public TransactionDirection Direction { get; set; }
+
+    [NotNull]
     [Column("amount")]
     public decimal Amount { get; set; }
 
@@ -82,6 +86,12 @@ public class Transaction
     // ── Navigation (not persisted, populated in queries) ──────────────────────
     [Ignore]
     public Category? Category { get; set; }
+}
+
+public enum TransactionDirection
+{
+    Outgoing = 0,   // money leaving M-Pesa
+    Incoming = 1    // money entering M-Pesa
 }
 
 public enum TransactionType
