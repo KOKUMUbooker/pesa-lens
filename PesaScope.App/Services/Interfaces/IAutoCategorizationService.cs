@@ -8,7 +8,7 @@ public interface IAutoCategorizationService
 
     /// <summary>
     /// Categorizes a single transaction and returns the CategoryId that was
-    /// applied, or null if no rule matched. Use this when you need the resolved
+    /// applied, or Uncategorized rule id if no rule matched. Use this when you need the resolved
     /// CategoryId immediately after categorization (e.g. for budget notifications).
     /// </summary>
     Task<int?> CategorizeAndGetCategoryIdAsync(Transaction transaction);
