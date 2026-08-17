@@ -1107,6 +1107,94 @@ public class MpesaSmsParserTests
         Assert.Equal(TransactionType.AirtimePurchase, postpaid.Type);
         Assert.NotEqual(prepaid.CounterpartyName, postpaid.CounterpartyName);
     }
+
+    private const string PochiReceiveSms =
+    "UHGMK381SF Confirmed.You have received Ksh100.00 from Booker Okumu on " +
+    "16/8/26 at 10:37 PM New Pochi balance is Ksh1,660.00. To access your " +
+    "funds, Dial *334#,select Pochi la Biashara & Withdraw funds.";
+
+    [Fact]
+    public void Parse_PochiReceive_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(PochiReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.PochiLaBiashara, result.Type);
+        Assert.Equal(TransactionDirection.Incoming, result.Direction);
+    }
+
+    [Fact]
+    public void Parse_PochiReceive_ExtractsAmountAndSender()
+    {
+        var result = _parser.Parse(PochiReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(100.00m, result.Amount);
+        Assert.Equal("Booker Okumu", result.CounterpartyName);
+    }
+
+    private const string KcbBankReceiveSms =
+        "UHHBO39XXX Confirmed.You have received Ksh4,300.00 from KCB 1 501901 on " +
+        "17/8/27 at 9:22 PM New M-PESA balance is Ksh4,527.94. Separate personal " +
+        "and business funds through Pochi la Biashara on *334#.";
+
+    private const string NcbaBankReceiveSms =
+        "UCQMKAL6S6 Confirmed. You have received Ksh1,000.00 from NCBA BANK on " +
+        "26/3/26 at 5:21 PM. New M-PESA balance is Ksh1,131.67. Separate personal " +
+        "and business funds through Pochi la Biashara on *334#.";
+
+    private const string EquityBankReceiveSms =
+        "UHHMK3C3PO Confirmed.You have received Ksh50.00 from Equity Bulk Account " +
+        "300600 on 17/8/26 at 11:57 PM New M-PESA balance is Ksh301.03. Separate " +
+        "personal and business funds through Pochi la Biashara on *334#.";
+
+    [Theory]
+    [InlineData(nameof(KcbBankReceiveSms))]
+    [InlineData(nameof(NcbaBankReceiveSms))]
+    [InlineData(nameof(EquityBankReceiveSms))]
+    public void Parse_BankTransferReceive_ReturnsReceiveMoneyIncoming(string _)
+    {
+        // xUnit Theory can't reference private consts by name directly;
+        // if you want table-driven here, switch to [MemberData] instead —
+        // shown separately below for clarity.
+    }
+
+    [Fact]
+    public void Parse_KcbBankReceive_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(KcbBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.ReceiveMoney, result.Type);
+        Assert.Equal(TransactionDirection.Incoming, result.Direction);
+        Assert.Equal(4300.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_NcbaBankReceive_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(NcbaBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.ReceiveMoney, result.Type);
+        Assert.Equal(1000.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_EquityBankReceive_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(EquityBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.ReceiveMoney, result.Type);
+        Assert.Equal(50.00m, result.Amount);
+    }
+
+    [Fact]
+    public void Parse_BankTransferReceive_DoesNotStealFromReceiveMoneyPattern()
+    {
+        // Regression guard: your existing SendMoneySms/ReceiveMoneySms with real
+        // phone numbers must still route to the stricter, original pattern.
+        var result = _parser.Parse(ReceiveMoneySms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("0799***013", result.CounterpartyNumber); // proves it used ReceiveMoneyPattern, not the new one
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
