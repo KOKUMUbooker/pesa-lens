@@ -55,5 +55,6 @@ public enum RuleType
     PaybillNumber = 2,
     TillNumber = 3,
     TransactionType = 4,
-    ContainsText = 5
+    ContainsText = 5,
+    Direction = 6
 }
