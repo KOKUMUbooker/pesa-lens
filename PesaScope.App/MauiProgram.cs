@@ -1,5 +1,7 @@
 ﻿using LiveChartsCore.SkiaSharpView.Maui;
+using Microsoft.Maui.Handlers;
 using Mopups.Hosting;
+using PesaScope.App.Data;
 using PesaScope.App.Data.Repositories;
 using PesaScope.App.Data.Repositories.Interfaces;
 using PesaScope.App.Services;
@@ -13,11 +15,10 @@ using PesaScope.App.Views.Security;
 using PesaScope.App.Views.Settings;
 using PesaScope.App.Views.Transactions;
 using PesaScope.Core.Services;
-using PesaScope.App.Data;
 using PesaScope.Core.Services.Interfaces;
 using Plugin.LocalNotification;
-using SkiaSharp.Views.Maui.Controls.Hosting;
 using Plugin.Maui.Biometric;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using UraniumUI;
 
 namespace PesaScope.App
@@ -50,6 +51,8 @@ namespace PesaScope.App
 #endif
                 });
             builder.Services.AddMopupsDialogs();
+
+            ConfigureHandlers();
 
             // Onboarding pages — transient because they are created once and discarded
             builder.Services.AddTransient<WelcomePage>();
@@ -110,6 +113,27 @@ namespace PesaScope.App
             ServiceLocator.Initialize(app.Services);
 
             return app;
+        }
+
+        // To globally override android's behavior in maui of displaying underline on Entry, Picker and Editor controls
+        private static void ConfigureHandlers()
+        {
+#if ANDROID
+            PickerHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
+            {
+                handler.PlatformView.Background = null;
+            });
+
+            EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
+            {
+                handler.PlatformView.Background = null;
+            });
+
+            EditorHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
+            {
+                handler.PlatformView.Background = null;
+            });
+#endif
         }
     }
 }
