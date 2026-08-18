@@ -440,51 +440,61 @@
 
                 <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
 
+                    
                     <!-- From date -->
                     <VerticalStackLayout Grid.Column="0" Spacing="6">
                         <Label Text="From" FontSize="12"
                             TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                        <Border
-                            Stroke="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
-                            StrokeThickness="1"
-                            Padding="4,0"
-                            BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10" />
-                            </Border.StrokeShape>
-                            <DatePicker
-                                x:Name="FromDatePicker"
-                                Date="{Binding FromDate}"
-                                Format="d MMM yyyy"
-                                FontSize="13"
-                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
-                                BackgroundColor="Transparent" />
+                        <Border Grid.Column="1"
+                             BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                             StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,0">
+                            <Grid>
+                                <DatePicker
+                                     x:Name="FromDatePicker"
+                                     Date="{Binding FromDate}"
+                                     Format="d MMM yyyy"
+                                     FontSize="13"
+                                     TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                     BackgroundColor="Transparent" />
+                                <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Edit_calendar}"
+                                         Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                         Size="18"/>
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
                         </Border>
                     </VerticalStackLayout>
 
-                    <Label Grid.Column="1" Text="->" FontSize="18"
-                        VerticalOptions="End" Margin="0,0,0,8"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                    <Label FontFamily="MaterialSharp" Text="{x:Static m:MaterialSharp.Arrow_right_alt}"
+                       Grid.Column="1" FontSize="18"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                       VerticalOptions="End" Margin="0,0,0,8"/>
 
                     <!-- To date -->
                     <VerticalStackLayout Grid.Column="2" Spacing="6">
                         <Label Text="To" FontSize="12"
                             TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                        <Border
-                            Stroke="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
-                            StrokeThickness="1"
-                            Padding="4,0"
-                            BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10" />
-                            </Border.StrokeShape>
-                            <DatePicker
-                                x:Name="ToDatePicker"
-                                Date="{Binding ToDate}"
-                                Format="d MMM yyyy"
-                                FontSize="13"
-                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
-                                BackgroundColor="Transparent" />
+                        <Border Grid.Column="1"
+                           BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                           StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,0">
+                            <Grid>
+                                <DatePicker
+                                    x:Name="ToDatePicker"
+                                    Date="{Binding ToDate}"
+                                    Format="d MMM yyyy"
+                                    FontSize="13"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                    BackgroundColor="Transparent" />
+                                <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Edit_calendar}"
+                                           Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                           Size="18"/>      
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
                         </Border>
                     </VerticalStackLayout>
 
