@@ -115,7 +115,7 @@ namespace PesaScope.App
             return app;
         }
 
-        // To globally override android's behavior in maui of displaying underline on Entry, Picker and Editor controls
+        // To globally override android's behavior in maui of displaying underline on Entry, Picker, DatePickerHandler and Editor controls
         private static void ConfigureHandlers()
         {
 #if ANDROID
@@ -130,6 +130,11 @@ namespace PesaScope.App
             });
 
             EditorHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
+            {
+                handler.PlatformView.Background = null;
+            });
+
+            DatePickerHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
             {
                 handler.PlatformView.Background = null;
             });
