@@ -167,4 +167,13 @@ public partial class TransactionDetailViewModel : ObservableObject
 
         await Clipboard.Default.SetTextAsync(Transaction.MpesaCode);
     }
+
+    [RelayCommand]
+    public async Task CopyCounterPartyAsync()
+    {
+        if (Transaction is null || string.IsNullOrWhiteSpace(Transaction.CounterpartyName))
+            return;
+
+        await Clipboard.Default.SetTextAsync(Transaction.CounterpartyName);
+    }
 }

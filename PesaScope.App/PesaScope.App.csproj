@@ -30,8 +30,8 @@
 		<ApplicationIdGuid>d2c853b3-5f37-46c0-be1e-d50cab8976a3</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.6</ApplicationDisplayVersion>
-		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.7</ApplicationDisplayVersion>
+		<ApplicationVersion>8</ApplicationVersion>
 
 		<!-- To allow debugging via usb on real device -->
 		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>

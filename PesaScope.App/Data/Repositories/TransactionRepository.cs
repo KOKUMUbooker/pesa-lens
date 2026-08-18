@@ -119,7 +119,10 @@ public class TransactionRepository(DatabaseService databaseService)
 
     public async Task<Dictionary<int, decimal>> GetSpendingByCategoryAsync(DateTime from, DateTime to)
     {
-        var transactions = await GetByDateRangeAsync(from, to);
+        var transactions = await _db.Table<Transaction>()
+            .Where(t => t.TransactionDate >= from && t.TransactionDate <= to
+                    /* && t.Direction == TransactionDirection.Outgoing */)
+            .ToListAsync();
 
         return transactions
             .GroupBy(t => t.CategoryId)
@@ -128,7 +131,10 @@ public class TransactionRepository(DatabaseService databaseService)
 
     public async Task<Dictionary<DateTime, decimal>> GetDailySpendingAsync(DateTime from, DateTime to)
     {
-        var transactions = await GetByDateRangeAsync(from, to);
+        var transactions = await _db.Table<Transaction>()
+            .Where(t => t.TransactionDate >= from && t.TransactionDate <= to
+                     && t.Direction == TransactionDirection.Outgoing)
+            .ToListAsync();
 
         return transactions
             .GroupBy(t => t.TransactionDate.Date)

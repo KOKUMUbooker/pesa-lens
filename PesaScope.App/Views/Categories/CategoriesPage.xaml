@@ -123,13 +123,22 @@
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="RULE TYPE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                            StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding RuleTypes}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Grid>
+                            <Picker ItemsSource="{Binding RuleTypes}"
                                 SelectedItem="{Binding RuleType}"
                                 FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
                                 TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
@@ -147,15 +156,23 @@
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="ASSIGN TO CATEGORY" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                            StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4"
-                            x:Name="CategoryPickerBorder">
-                        <Picker x:Name="RuleCategoryPicker"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Grid>
+                            <Picker x:Name="RuleCategoryPicker"
                                 ItemDisplayBinding="{Binding Name}"
                                 FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
                                 TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
                                 SelectedIndexChanged="OnRuleCategorySelected"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
@@ -214,26 +231,44 @@
                 <!-- Category type -->
                 <VerticalStackLayout Spacing="6">
                     <Label Text="CATEGORY TYPE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding CategoryTypeFilterOptions}"
-                        SelectedItem="{Binding DraftCategoryTypeFilter}"
-                        FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Grid>
+                            <Picker ItemsSource="{Binding CategoryTypeFilterOptions}"
+                                SelectedItem="{Binding DraftCategoryTypeFilter}"
+                                FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
                 <!-- Sort by -->
                 <VerticalStackLayout Spacing="6">
                     <Label Text="SORT BY" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding CategorySortOptions}"
-                        SelectedItem="{Binding DraftCategorySortOption}"
-                        FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Grid>
+                            <Picker ItemsSource="{Binding CategorySortOptions}"
+                                SelectedItem="{Binding DraftCategorySortOption}"
+                                FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
@@ -264,18 +299,36 @@
                     <Border Grid.Column="0"
                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding AvailableMonths}"
-                            SelectedItem="{Binding SelectedMonth}"
-                            FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        <Grid>
+                            <Picker ItemsSource="{Binding AvailableMonths}"
+                                SelectedItem="{Binding SelectedMonth}"
+                                FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                     <Border Grid.Column="1"
                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding AvailableYears}"
-                            SelectedItem="{Binding SelectedYear}"
-                            FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        <Grid>
+                            <Picker ItemsSource="{Binding AvailableYears}"
+                                SelectedItem="{Binding SelectedYear}"
+                                FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>     
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </Grid>
 
@@ -583,12 +636,21 @@
                                     <Border Grid.Column="1"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="10,0"
-                                        WidthRequest="140">
-                                        <Picker ItemsSource="{Binding RuleFilterCategories}"
-                                            ItemDisplayBinding="{Binding Name}"
-                                            SelectedItem="{Binding RuleFilterCategory}"
-                                            FontSize="13" HeightRequest="44" BackgroundColor="Transparent"
-                                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                                        WidthRequest="140">         
+                                        <Grid>
+                                            <Picker ItemsSource="{Binding RuleFilterCategories}"
+                                                ItemDisplayBinding="{Binding Name}"
+                                                SelectedItem="{Binding RuleFilterCategory}"
+                                                FontSize="13" HeightRequest="44" BackgroundColor="Transparent"
+                                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,2,0">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                                        Size="16"/>     
+                                                </Image.Source>
+                                            </Image>
+                                        </Grid>
                                     </Border>
                                 </Grid>
 

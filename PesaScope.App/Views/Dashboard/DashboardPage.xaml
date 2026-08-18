@@ -203,22 +203,47 @@
                     <!-- ── Monthly mode: year/month + week chips ────────────────────── -->
                     <VerticalStackLayout Spacing="10" IsVisible="{Binding IsMonthlyMode}">
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <Border Grid.Column="0"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                                <Picker ItemsSource="{Binding AvailableMonths}"
-                                    SelectedItem="{Binding SelectedMonth}"
-                                    FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
-                                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                            </Border>
-                            <Border Grid.Column="1"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                                <Picker ItemsSource="{Binding AvailableYears}"
-                                    SelectedItem="{Binding SelectedYear}"
-                                    FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
-                                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                            </Border>
+                                <Border Grid.Column="0"
+                                     BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                                     StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                                    <Grid>
+                                        <Picker Title="Month"
+                                             ItemsSource="{Binding AvailableMonths}"
+                                             SelectedItem="{Binding SelectedMonth}"
+                                             FontSize="14" HeightRequest="46"
+                                             TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                             TitleColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
+                                             BackgroundColor="Transparent"/>
+                                        <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                                     Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                                     Size="18"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Grid>
+                                </Border>
+
+                                <Border Grid.Column="1"
+                                     BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                                     StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                                    <Grid>
+                                        <Picker Title="Year"
+                                            ItemsSource="{Binding AvailableYears}"
+                                            SelectedItem="{Binding SelectedYear}"
+                                            FontSize="14" HeightRequest="46"
+                                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                            TitleColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
+                                            BackgroundColor="Transparent"/>
+                                        <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                                 Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                                 Size="18"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Grid>
+                                </Border>
                         </Grid>
 
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
@@ -258,7 +283,27 @@
                     </VerticalStackLayout>
 
                     <!-- ── Yearly mode: year selector ─────────────────────────────────── -->
-                    <Border Grid.Column="0"
+                        <Border Grid.Column="0"
+                           BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                           StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4" IsVisible="{Binding IsYearlyMode}">
+                            <Grid>
+                                <Picker Title="Year"
+                                  ItemsSource="{Binding AvailableYears}"
+                                  SelectedItem="{Binding SelectedYear}"
+                                  FontSize="14" HeightRequest="46"
+                                  TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                  TitleColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
+                                  BackgroundColor="Transparent"/>
+                                <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                           Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                           Size="18"/>
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
+                        </Border>
+                    <!--<Border Grid.Column="0"
                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4"
                         IsVisible="{Binding IsYearlyMode}">
@@ -266,7 +311,7 @@
                             SelectedItem="{Binding SelectedYear}"
                             FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
                             TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                    </Border>
+                    </Border>-->
 
                     <!-- ── NET BALANCE HERO CARD ─────────────────────────── -->
                     <HomeControls:BalanceCardView
