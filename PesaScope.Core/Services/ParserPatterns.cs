@@ -40,7 +40,7 @@ public static class ParserPatterns
         @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
         @"(?<name>[A-Z0-9\s&'\-\.]+?) for account " +
         @"(?<account>[A-Z0-9\-\s]+?) on " +
-        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M) " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.?\s*" +
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
         @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
