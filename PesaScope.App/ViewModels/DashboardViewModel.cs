@@ -17,6 +17,12 @@ public enum DashboardViewMode
     Yearly = 2
 }
 
+public enum ChartDisplayMode
+{
+    Graph = 0,
+    Details = 1
+}
+
 public partial class WeekOption : ObservableObject
 {
     public DateTime Start { get; init; }
@@ -24,6 +30,13 @@ public partial class WeekOption : ObservableObject
     public string Label { get; init; } = string.Empty;
 
     [ObservableProperty] private bool _isSelected;
+}
+
+public partial class ChartDetailItem
+{
+    public string Label { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+    public string FormattedAmount => $"Ksh {Amount:N0}";
 }
 
 public partial class CategorySpendItem
@@ -105,6 +118,21 @@ public partial class DashboardViewModel : ObservableObject
 
     [RelayCommand]
     private void CloseNetBalanceHelp() => IsNetBalanceHelpOpen = false;
+
+    [ObservableProperty] private ChartDisplayMode _chartDisplayMode = ChartDisplayMode.Graph;
+    [ObservableProperty] private List<ChartDetailItem> _chartDetailItems = [];
+
+    public bool IsChartGraphMode => ChartDisplayMode == ChartDisplayMode.Graph;
+    public bool IsChartDetailsMode => ChartDisplayMode == ChartDisplayMode.Details;
+
+    partial void OnChartDisplayModeChanged(ChartDisplayMode value)
+    {
+        OnPropertyChanged(nameof(IsChartGraphMode));
+        OnPropertyChanged(nameof(IsChartDetailsMode));
+    }
+
+    [RelayCommand]
+    private void SetChartDisplayMode(ChartDisplayMode mode) => ChartDisplayMode = mode;
 
     // ── Constructor ───────────────────────────────────────────────────────────
     public DashboardViewModel(ITransactionRepository transactions, ICategoryRepository categories)
@@ -354,14 +382,25 @@ public partial class DashboardViewModel : ObservableObject
         int dayCount = (to.Date - from.Date).Days + 1;
         var labels = new string[dayCount];
         var values = new double[dayCount];
+        var details = new List<ChartDetailItem>(dayCount);
 
         for (int i = 0; i < dayCount; i++)
         {
             var day = from.Date.AddDays(i);
+            var amount = daily.TryGetValue(day, out var amt) ? amt : 0m;
+
             labels[i] = day.ToString("ddd");
-            values[i] = daily.TryGetValue(day, out var amt) ? (double)amt : 0d;
+            values[i] = (double)amount;
+
+            details.Add(new ChartDetailItem
+            {
+                // "Monday, 12 Aug" reads well for both weekly and monthly modes
+                Label = day.ToString("dddd, d MMM"),
+                Amount = amount
+            });
         }
 
+        ChartDetailItems = details;
         BuildChart(labels, values);
     }
 
@@ -370,13 +409,9 @@ public partial class DashboardViewModel : ObservableObject
     private async Task LoadYearlyChartAsync(int year)
     {
         var yearStart = new DateTime(year, 1, 1);
-        var lastDay = year == DateTime.Today.Year
-            ? DateTime.Today
-            : new DateTime(year, 12, 31);
-        var yearEnd = lastDay.Date.AddDays(1).AddTicks(-1); // end of lastDay, 23:59:59.9999999
+        var lastDay = year == DateTime.Today.Year ? DateTime.Today : new DateTime(year, 12, 31);
+        var yearEnd = lastDay.Date.AddDays(1).AddTicks(-1);
 
-        // Reuses the existing daily-spending query; a year of daily rows is
-        // negligible to aggregate client-side, so no new repository method needed.
         var daily = await _transactions.GetDailySpendingAsync(yearStart, yearEnd);
 
         var monthTotals = new decimal[12];
@@ -390,6 +425,14 @@ public partial class DashboardViewModel : ObservableObject
             .Select(m => new DateTime(2000, m, 1).ToString("MMMM")[..1])
             .ToArray();
         var values = monthTotals.Select(v => (double)v).ToArray();
+
+        ChartDetailItems = Enumerable.Range(1, 12)
+            .Select(m => new ChartDetailItem
+            {
+                Label = new DateTime(2000, m, 1).ToString("MMMM"),
+                Amount = monthTotals[m - 1]
+            })
+            .ToList();
 
         BuildChart(labels, values);
     }

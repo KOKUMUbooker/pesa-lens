@@ -1,12 +1,19 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
     x:Class="PesaScope.App.Controls.Home.SpendingChartView"
     xmlns:controls="clr-namespace:PesaScope.App.Controls.Home"
+    xmlns:converters="clr-namespace:PesaScope.App.Converters"
+    xmlns:vm="clr-namespace:PesaScope.App.ViewModels"
     x:DataType="controls:SpendingChartView"
     x:Name="this">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
 
     <Border
         BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
@@ -32,7 +39,9 @@
                     VerticalOptions="Center"/>
             </Grid>
 
+            <!-- ── Graph ─────────────────────────────────────────────── -->
             <lvc:CartesianChart
+                IsVisible="{Binding Source={x:Reference this}, Path=IsGraphMode}"
                 HeightRequest="180"
                 Background="Transparent"
                 Series="{Binding Source={x:Reference this}, Path=Series}"
@@ -44,6 +53,63 @@
                 TooltipBackgroundPaint="{x:Null}"
                 TooltipTextPaint="{x:Null}"
                 AnimationsSpeed="00:00:00.600"/>
+
+            <!-- ── Details ───────────────────────────────────────────── -->
+            <CollectionView
+                IsVisible="{Binding Source={x:Reference this}, Path=IsGraphMode, Converter={StaticResource InverseBoolConverter}}"
+                ItemsSource="{Binding Source={x:Reference this}, Path=DetailItems}"
+                HeightRequest="180"
+                VerticalScrollBarVisibility="Default">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ChartDetailItem">
+                        <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                            <Label
+                                Grid.Column="0"
+                                Text="{Binding Label}"
+                                FontSize="13"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding FormattedAmount}"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- ── Segmented toggle: Graph / Details ────────────────────── -->
+            <HorizontalStackLayout Spacing="0" HorizontalOptions="Center" Margin="0,4,0,0">
+                <Border StrokeThickness="0" StrokeShape="RoundRectangle 20,0,0,20" Padding="14,6">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference this}, Path=IsGraphMode}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference this}, Path=IsGraphMode}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={x:Reference this}, Path=SetDisplayModeCommand}" CommandParameter="{x:Static vm:ChartDisplayMode.Graph}"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="Graph" FontSize="11" TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </Border>
+                <Border StrokeThickness="0" StrokeShape="RoundRectangle 0,20,20,0" Padding="14,6">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference this}, Path=IsGraphMode}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference this}, Path=IsGraphMode}" Value="True">
+                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={x:Reference this}, Path=SetDisplayModeCommand}" CommandParameter="{x:Static vm:ChartDisplayMode.Details}"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="Details" FontSize="11" TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </Border>
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
     </Border>

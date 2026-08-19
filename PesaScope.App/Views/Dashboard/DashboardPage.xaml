@@ -303,15 +303,7 @@
                                 </Image>
                             </Grid>
                         </Border>
-                    <!--<Border Grid.Column="0"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4"
-                        IsVisible="{Binding IsYearlyMode}">
-                        <Picker ItemsSource="{Binding AvailableYears}"
-                            SelectedItem="{Binding SelectedYear}"
-                            FontSize="14" HeightRequest="46" BackgroundColor="Transparent"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                    </Border>-->
+                     
 
                     <!-- ── NET BALANCE HERO CARD ─────────────────────────── -->
                     <HomeControls:BalanceCardView
@@ -322,12 +314,15 @@
                         ShowHelpCommand="{Binding ShowNetBalanceHelpCommand}" />
 
                         <!-- ── DAILY SPENDING CHART ──────────────────────────── -->
-                    <HomeControls:SpendingChartView
-                        ChartTitle="{Binding ChartTitle}"
-                        PeriodLabel="{Binding PeriodLabel}"
-                        Series="{Binding SpendingSeries}"
-                        XAxes="{Binding XAxes}"
-                        YAxes="{Binding YAxes}"/>
+                        <HomeControls:SpendingChartView
+                            ChartTitle="{Binding ChartTitle}"
+                            PeriodLabel="{Binding PeriodLabel}"
+                            Series="{Binding SpendingSeries}"
+                            XAxes="{Binding XAxes}"
+                            YAxes="{Binding YAxes}"
+                            DetailItems="{Binding ChartDetailItems}"
+                            IsGraphMode="{Binding IsChartGraphMode}"
+                            SetDisplayModeCommand="{Binding SetChartDisplayModeCommand}"/>
 
                         <!-- ── TOP CATEGORIES ────────────────────────────────── -->
                     <HomeControls:TopCategoriesView
