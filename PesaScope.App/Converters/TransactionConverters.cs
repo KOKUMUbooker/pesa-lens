@@ -52,19 +52,8 @@ public class TransactionPageTypeToColorConverter : IValueConverter
     private static readonly Color Incoming = Color.FromArgb("#1A8C62");
     private static readonly Color Outgoing = Color.FromArgb("#C0392B");
 
-    private static readonly HashSet<TransactionType> OutgoingTypes =
-    [
-        TransactionType.SendMoney,
-        TransactionType.PayBill,
-        TransactionType.BuyGoods,
-        TransactionType.AirtimePurchase,
-        TransactionType.Withdrawal,
-        TransactionType.Fuliza,
-        TransactionType.MShwari
-    ];
-
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value is TransactionType type && OutgoingTypes.Contains(type) ? Outgoing : Incoming;
+        value is TransactionDirection.Outgoing ? Outgoing : Incoming;
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotImplementedException();

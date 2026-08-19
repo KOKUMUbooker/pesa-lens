@@ -10,8 +10,10 @@
     xmlns:budgets="clr-namespace:PesaScope.App.Views.Budgets"
     xmlns:settings="clr-namespace:PesaScope.App.Views.Settings"
     xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+    Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" 
     Shell.FlyoutBehavior="Disabled" >
-
+    <!-- "Shell.ForegroundColor" - Helps set the color of the back button globally-->
+    
     <TabBar 
         
         Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"

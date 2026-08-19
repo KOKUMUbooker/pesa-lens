@@ -43,14 +43,15 @@ public class AutoCategorizationRuleRepository(DatabaseService databaseService)
             (RuleType.PaybillNumber, "888880", "Utilities", 10), // KPLC Prepaid
             (RuleType.PaybillNumber, "888882", "Utilities", 10), // KPLC Postpaid
             (RuleType.PaybillNumber, "80200",  "Utilities", 10), // Nairobi Water
-            (RuleType.ContainsText,  "KPLC",           "Utilities", 9),
+            (RuleType.ContainsText,  "KPLC",   "Utilities", 9),
             (RuleType.ContainsText,  "WATER",  "Utilities", 9),
-            (RuleType.ContainsText,  "ZUKU",            "Utilities", 9),
-            (RuleType.ContainsText,  "FAIBA",           "Utilities", 9),
+            (RuleType.ContainsText,  "ZUKU",   "Utilities", 9),
+            (RuleType.ContainsText,  "FAIBA",  "Utilities", 9),
 
             // Airtime & Data
-            (RuleType.PaybillNumber, "100",          "Airtime & Data", 10), // Safaricom
+            (RuleType.PaybillNumber,   "100",             "Airtime & Data", 10), // Safaricom
             (RuleType.TransactionType, "AirtimePurchase", "Airtime & Data", 10),
+            (RuleType.ContainsText,    "TUNUKIWA",        "Airtime & Data", 8),
 
             // Transport
             (RuleType.ContainsText, "UBER",   "Transport", 9),
@@ -69,6 +70,9 @@ public class AutoCategorizationRuleRepository(DatabaseService databaseService)
             (RuleType.ContainsText, "CARREFOUR", "Food & Groceries", 8),
             (RuleType.ContainsText, "JAVA",      "Food & Groceries", 8),
             (RuleType.ContainsText, "KFC",       "Food & Groceries", 8),
+
+            // Shopping
+            (RuleType.ContainsText, "SUPERMARKET", "Shopping", 8),
 
             // Income — anything incoming, unless a more specific rule (e.g. Netflix,
             // GitHub) already claimed it at a higher priority

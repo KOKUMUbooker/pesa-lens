@@ -315,12 +315,12 @@
 
                                                     <!-- Amount -->
                                                     <Label
-                                                    Grid.Column="2"
-                                                    Text="{Binding Amount, StringFormat='Ksh {0:N0}'}"
-                                                    FontSize="14"
-                                                    FontAttributes="Bold"
-                                                    VerticalOptions="Center"
-                                                    TextColor="{Binding Type, Converter={StaticResource TransactionTypeToColorConverter}}" />
+                                                        Grid.Column="2"
+                                                        Text="{Binding Amount, StringFormat='Ksh {0:N0}'}"
+                                                        FontSize="14"
+                                                        FontAttributes="Bold"
+                                                        VerticalOptions="Center"
+                                                        TextColor="{Binding Direction, Converter={StaticResource TransactionTypeToColorConverter}}" />
 
                                                 </Grid>
                                             </Border>
