@@ -1195,6 +1195,28 @@ public class MpesaSmsParserTests
         Assert.Equal("0799***013", result.CounterpartyNumber); // proves it used ReceiveMoneyPattern, not the new one
     }
 
+    private const string SafaricomOffersSms =
+        "UHHBO39XXX Confirmed. Ksh100.00 sent to Safaricom Offers for account " +
+        "Tunukiwa on 19/8/26 at 1:00 PM. New M-PESA balance is Ksh2,957.94. " +
+        "Transaction cost, Ksh0.00.";
+
+    [Fact]
+    public void Parse_SafaricomOffers_ReturnsPayBillTypeAndOutgoing()
+    {
+        var result = _parser.Parse(SafaricomOffersSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.PayBill, result.Type);
+        Assert.Equal(TransactionDirection.Outgoing, result.Direction);
+    }
+
+    [Fact]
+    public void Parse_SafaricomOffers_ExtractsMerchantAndAccount()
+    {
+        var result = _parser.Parse(SafaricomOffersSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("Safaricom Offers", result.CounterpartyName);
+        Assert.Equal("Tunukiwa", result.CounterpartyNumber);
+    }
     // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
@@ -1248,6 +1270,9 @@ public class MpesaSmsParserTests
     [InlineData(
         "SH56CAR987 Confirmed. Ksh 1,940.00 paid to Netflix US using M-PESA GlobalPay virtual card ending *4321 on 14/8/26 at 6:30 PM. Exch Rate: 1 USD = Ksh 130.00. Fee: Ksh 0.00. New M-PESA balance is Ksh 16,310.00.",
         TransactionType.GlobalPayment)]
+    [InlineData(
+        "UHHBO39XXX Confirmed. Ksh100.00 sent to Safaricom Offers for account Tunukiwa on 19/8/26 at 1:00 PM. New M-PESA balance is Ksh2,957.94. Transaction cost, Ksh0.00.",
+        TransactionType.PayBill)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);
