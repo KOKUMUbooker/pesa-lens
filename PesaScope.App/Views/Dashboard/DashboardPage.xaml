@@ -63,12 +63,12 @@
 
     <uranium:UraniumContentPage.Attachments>
         <material:BottomSheetView
-        xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-        x:Name="NetBalanceHelpSheet"
-        IsPresented="{Binding IsNetBalanceHelpOpen}"
-        IsVisible="{Binding IsNetBalanceHelpOpen}"
-        CloseOnTapOutside="True"
-        BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+            xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+            x:Name="NetBalanceHelpSheet"
+            IsPresented="{Binding IsNetBalanceHelpOpen}"
+            IsVisible="{Binding IsNetBalanceHelpOpen}"
+            CloseOnTapOutside="True"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
 
             <VerticalStackLayout Padding="24,12,24,48" Spacing="16">
 
@@ -79,9 +79,13 @@
                 <Label FontSize="14"
                    Text="Net Balance = Money In − Money Out for the selected period."
                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                
+
                 <Label FontSize="14"
-                   Text="Only M-Pesa SMS transactions on this device are counted — cash, bank transfers, and other wallets aren't included."
+                   Text="Money In includes anything received via M-Pesa — payments, deposits, reversals, and transfers from banks like KCB, NCBA, or Equity. Money Out includes anything sent, paid, or withdrawn via M-Pesa."
+                   TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                <Label FontSize="14"
+                   Text="Only transactions confirmed by M-Pesa SMS on this device are counted — cash handled outside M-Pesa, or transfers that never sent an SMS, aren't included."
                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
 
                 <!-- Extra note, only shown when balance is negative -->
@@ -89,7 +93,7 @@
                     BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                     StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14">
                     <Label FontSize="13"
-                       Text="A negative balance usually means some income for this period — like a bank deposit or cash top-up — wasn't captured as an M-Pesa message. Your actual M-Pesa balance is unaffected."
+                       Text="A negative balance usually means some income for this period — like cash handed to you directly, or a transfer that didn't trigger an M-Pesa SMS — wasn't captured. Your actual M-Pesa balance is unaffected."
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                 </Border>
 
