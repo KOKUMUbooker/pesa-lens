@@ -13,6 +13,8 @@ public partial class App : Application
 {
     private readonly IAppSettingsRepository _appSettingsRepo;
     private readonly IServiceProvider _services;
+    private static string? _pendingMpesaCode;
+    private static bool _pendingBudgetTap;
 
     // Signals when DB init + seeding are done
     private readonly TaskCompletionSource _dbReady = new();
@@ -109,22 +111,46 @@ public partial class App : Application
         }
     }
 
-    static async void OnNotificationActionTapped(NotificationActionEventArgs e)
+    static void OnNotificationActionTapped(NotificationActionEventArgs e)
     {
         if (!e.IsTapped) return;
 
         var mpesaCode = e.Request.ReturningData;
 
+        // Stash the intent — actual navigation happens once Shell is live
         if (!string.IsNullOrWhiteSpace(mpesaCode))
-        {
-            // Transaction notification — navigate to detail page
-            await Shell.Current.GoToAsync(
-                $"{nameof(TransactionDetailPage)}?code={mpesaCode}");
-        }
+            _pendingMpesaCode = mpesaCode;
         else
+            _pendingBudgetTap = true;
+
+        _ = TryHandlePendingNavigationAsync();
+    }
+
+    private static async Task TryHandlePendingNavigationAsync()
+    {
+        // Wait until Shell.Current exists (app finished SetStartPageAsync)
+        for (int i = 0; i < 50 && Shell.Current is null; i++)
+            await Task.Delay(100);
+
+        if (Shell.Current is null) return; // give up quietly rather than crash
+
+        try
         {
-            // Budget notification — navigate to budgets tab
-            await Shell.Current.GoToAsync("//Budgets/BudgetsPage");
+            if (_pendingMpesaCode is not null)
+            {
+                var code = _pendingMpesaCode;
+                _pendingMpesaCode = null;
+                await Shell.Current.GoToAsync($"{nameof(TransactionDetailPage)}?code={code}");
+            }
+            else if (_pendingBudgetTap)
+            {
+                _pendingBudgetTap = false;
+                await Shell.Current.GoToAsync("//Budgets/BudgetsPage");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Notification nav] {ex.Message}");
         }
     }
 }
