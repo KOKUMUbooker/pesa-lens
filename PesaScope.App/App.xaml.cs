@@ -116,8 +116,6 @@ public partial class App : Application
         if (!e.IsTapped) return;
 
         var mpesaCode = e.Request.ReturningData;
-
-        // Stash the intent — actual navigation happens once Shell is live
         if (!string.IsNullOrWhiteSpace(mpesaCode))
             _pendingMpesaCode = mpesaCode;
         else
@@ -126,13 +124,18 @@ public partial class App : Application
         _ = TryHandlePendingNavigationAsync();
     }
 
-    private static async Task TryHandlePendingNavigationAsync()
+    // Called both from the notification tap AND from AppLockPage after a
+    // successful unlock, so the pending intent is honored whenever it becomes possible.
+    public static async Task TryHandlePendingNavigationAsync()
     {
-        // Wait until Shell.Current exists (app finished SetStartPageAsync)
-        for (int i = 0; i < 50 && Shell.Current is null; i++)
+        if (_pendingMpesaCode is null && !_pendingBudgetTap) return;
+
+        // Wait for Shell to exist — but don't give up; this may legitimately
+        // take a while if the app is sitting on the lock screen.
+        for (int i = 0; i < 100 && Shell.Current is null; i++)
             await Task.Delay(100);
 
-        if (Shell.Current is null) return; // give up quietly rather than crash
+        if (Shell.Current is null) return; // still nothing after 10s — give up quietly
 
         try
         {

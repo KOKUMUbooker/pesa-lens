@@ -52,6 +52,7 @@ public partial class AppLockPage : UraniumUI.Pages.UraniumContentPage
         {
             _clockTimer?.Stop();
             Application.Current!.Windows[0].Page = new AppShell();
+            _ = App.TryHandlePendingNavigationAsync(); // flush any pending notification intent
         }
     }
 }
