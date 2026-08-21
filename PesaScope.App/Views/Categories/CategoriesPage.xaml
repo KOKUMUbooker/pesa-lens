@@ -25,7 +25,7 @@
 
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="*,Auto,Auto,Auto" Padding="5,10" >
+        <Grid ColumnDefinitions="*,Auto" Padding="5,10" >
             <Label Grid.Column="0" Text="Categories" FontSize="22" FontAttributes="Bold"
                VerticalOptions="Center"
                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
@@ -39,23 +39,6 @@
                 </ImageButton.Source>
             </ImageButton>
 
-            <ImageButton Grid.Column="2" Command="{Binding OpenAddRuleCommand}"
-                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
-                <ImageButton.Source>
-                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Rule}"
-                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                    Size="20"/>
-                </ImageButton.Source>
-            </ImageButton>
-
-            <ImageButton Grid.Column="3" Command="{Binding OpenAddCategoryCommand}"
-                     BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
-                <ImageButton.Source>
-                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
-                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                    Size="20"/>
-                </ImageButton.Source>
-            </ImageButton>
         </Grid>
     </Shell.TitleView>
 
@@ -332,6 +315,33 @@
                     </Border>
                 </Grid>
 
+                <!-- ── Income summary ────────────────────────────────────────── -->
+                <Border
+                    IsVisible="{Binding HasIncome}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
+                    Stroke="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
+                    StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="14,10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenIncomeCommand}"/>
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                        <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4"
+                            Color="{Binding IncomeRow.ChartColor}" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                            <Label Text="Income this period" FontSize="12"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                            <Label Text="{Binding IncomeRow.FormattedAmount}" FontSize="16" FontAttributes="Bold"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        </VerticalStackLayout>
+                        <Image Grid.Column="2" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Chevron_right}"
+                                    Color="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
+                                    Size="16"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
+                </Border>
 
                 <!-- ── Donut chart ───────────────────────────── -->
                 <Border
@@ -340,7 +350,6 @@
                     StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="16">
                     <Grid RowDefinitions="Auto,Auto">
 
-                        <!-- Header -->
                         <!-- Header (tap to expand/collapse) -->
                         <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
                             <Grid.GestureRecognizers>
@@ -431,7 +440,7 @@
                         <material:TabItem.Content>
                             <VerticalStackLayout Spacing="10" Padding="0,12,0,0">
                                 <!-- ── Search + filter ───────────────────────────────────────── -->
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="4,0,4,4">
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="4,0,4,4">
 
                                     <!-- Search box -->
                                     <Border Grid.Column="0"
@@ -442,7 +451,7 @@
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Search}"
                                                         Color="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
-                                                        Size="16"/>
+                                                        Size="16"/>     
                                                 </Image.Source>
                                             </Image>
                                             <Entry Grid.Column="1"
@@ -464,18 +473,33 @@
                                                 <ImageButton.Source>
                                                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Tune}"
                                                         Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                                        Size="20"/>
+                                                        Size="20"/>         
                                                 </ImageButton.Source>
                                             </ImageButton>
                                         </Border>
                                         <BoxView WidthRequest="9" HeightRequest="9" CornerRadius="4.5"
-                                             Color="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"
-                                             HorizontalOptions="End" VerticalOptions="Start"
-                                             Margin="0,4,4,0"
-                                             IsVisible="{Binding HasActiveCategoryFilters}"
-                                             InputTransparent="True"/>
+                                         Color="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"
+                                         HorizontalOptions="End" VerticalOptions="Start"
+                                         Margin="0,4,4,0"
+                                         IsVisible="{Binding HasActiveCategoryFilters}"
+                                         InputTransparent="True"/>
                                     </Grid>
+
+                                    <!-- Add category button -->
+                                    <Border Grid.Column="2" WidthRequest="44" HeightRequest="44"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
+                                        StrokeThickness="0" StrokeShape="RoundRectangle 12">
+                                        <ImageButton Command="{Binding OpenAddCategoryCommand}"
+                                            BackgroundColor="Transparent" Padding="10">
+                                            <ImageButton.Source>
+                                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
+                                                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                                    Size="20"/> 
+                                            </ImageButton.Source>
+                                        </ImageButton>
+                                    </Border>
                                 </Grid>
+
 
                                 <Border
                                     BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
@@ -607,8 +631,7 @@
                     <material:TabItem Title="Rules">
                         <material:TabItem.Content>
                             <VerticalStackLayout Spacing="10" Padding="0,12,0,0">
-                                <!-- ── Search + filter ───────────────────────────────────────── -->
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="4,0,4,4">
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="4,0,4,4">
 
                                     <!-- Search box -->
                                     <Border Grid.Column="0"
@@ -636,7 +659,7 @@
                                     <Border Grid.Column="1"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="10,0"
-                                        WidthRequest="140">         
+                                        WidthRequest="140">
                                         <Grid>
                                             <Picker ItemsSource="{Binding RuleFilterCategories}"
                                                 ItemDisplayBinding="{Binding Name}"
@@ -647,13 +670,27 @@
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
                                                         Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
-                                                        Size="16"/>     
+                                                        Size="16"/>
                                                 </Image.Source>
                                             </Image>
                                         </Grid>
                                     </Border>
-                                </Grid>
 
+                                    <!-- Add rule button -->
+                                    <Border Grid.Column="2" WidthRequest="44" HeightRequest="44"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
+                                        StrokeThickness="0" StrokeShape="RoundRectangle 12">
+                                        <ImageButton Command="{Binding OpenAddRuleCommand}"
+                                            BackgroundColor="Transparent" Padding="10">
+                                            <ImageButton.Source>
+                                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
+                                                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                                    Size="20"/>
+                                            </ImageButton.Source>
+                                        </ImageButton>
+                                    </Border>
+                                </Grid>
+                                
                                 <Border
                                     BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
                                     Stroke="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"

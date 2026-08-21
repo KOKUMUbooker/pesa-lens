@@ -77,6 +77,7 @@ public partial class CategoriesViewModel : ObservableObject
 
     [ObservableProperty] private string _periodLabel = string.Empty;
     [ObservableProperty] private CategorySpendRow? _selectedCategory;
+    [ObservableProperty] private CategorySpendRow? _incomeRow;
 
     // ── Accordion state for spending breakdown ───────────────────────────────
     [ObservableProperty] private bool _isChartExpanded = true;
@@ -142,6 +143,10 @@ public partial class CategoriesViewModel : ObservableObject
 
     public List<RuleType> RuleTypes { get; } = Enum.GetValues<RuleType>().ToList();
 
+    public bool HasIncome => IncomeRow is not null;
+
+    partial void OnIncomeRowChanged(CategorySpendRow? value) => OnPropertyChanged(nameof(HasIncome));
+
     public CategoriesViewModel(
         ICategoryRepository categoryRepo,
         ITransactionRepository transactionRepo,
@@ -206,23 +211,38 @@ public partial class CategoriesViewModel : ObservableObject
 
             var isCurrentMonth = from.Year == DateTime.Today.Year && from.Month == DateTime.Today.Month;
             var to = isCurrentMonth
-                ? DateTime.Today.AddDays(1).AddTicks(-1)          // today 23:59:59.9999999
-                : from.AddMonths(1).AddDays(-1).AddDays(1).AddTicks(-1); // last day of month, end of day
+                ? DateTime.Today.AddDays(1).AddTicks(-1)
+                : from.AddMonths(1).AddDays(-1).AddDays(1).AddTicks(-1);
 
             PeriodStart = from;
             PeriodEnd = to;
             PeriodLabel = from.ToString("MMMM yyyy");
 
             var categories = await _categoryRepo.GetAllActiveAsync();
-            var spendMap = await _transactionRepo.GetSpendingByCategoryAsync(from, to);
+            var spendMap = await _transactionRepo.GetSpendingByCategoryAsync(from, to); // outgoing-only now
+            var incomeTotal = await _transactionRepo.GetTotalReceivedAsync(from, to);
 
             decimal total = spendMap.Values.Sum();
 
             var pieSeries = new List<ISeries>();
             var categoryRows = new List<CategorySpendRow>();
+            CategorySpendRow? incomeRow = null;
 
             foreach (var cat in categories)
             {
+                // Pull Income out into its own row instead of the spending list/chart.
+                if (cat.Name == "Income")
+                {
+                    incomeRow = new CategorySpendRow
+                    {
+                        Category = cat,
+                        Amount = incomeTotal,
+                        Percentage = 0,
+                        ChartColor = Color.FromArgb(cat.Color)
+                    };
+                    continue;
+                }
+
                 var amount = spendMap.GetValueOrDefault(cat.Id);
                 var color = ParseColor(cat.Color);
                 var pct = total > 0 ? (double)(amount / total) * 100 : 0;
@@ -235,7 +255,6 @@ public partial class CategoriesViewModel : ObservableObject
                     ChartColor = Color.FromArgb(cat.Color)
                 });
 
-                // Only add to pie chart if there's actual spending
                 if (amount > 0)
                 {
                     pieSeries.Add(new PieSeries<double>
@@ -254,6 +273,7 @@ public partial class CategoriesViewModel : ObservableObject
             Series = [.. pieSeries];
             _allCategoryRows = categoryRows;
             IsChartEmpty = total <= 0;
+            IncomeRow = incomeRow;
 
             ApplyCategoryDisplayFilters();
         }
@@ -473,6 +493,16 @@ public partial class CategoriesViewModel : ObservableObject
         EditIcon = row.Category.Icon;
         EditColor = row.Category.Color;
         IsSheetOpen = true;
+    }
+
+    [RelayCommand]
+    public async Task OpenIncomeAsync()
+    {
+        if (IncomeRow is null) return;
+
+        await Shell.Current.GoToAsync(
+            $"//Transactions/TransactionsPage?categoryId={IncomeRow.Category.Id}" +
+            $"&fromDate={PeriodStart:yyyy-MM-dd}&toDate={PeriodEnd:yyyy-MM-dd}");
     }
 
     [RelayCommand]
