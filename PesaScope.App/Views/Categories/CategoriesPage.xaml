@@ -25,7 +25,7 @@
 
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
-        <Grid ColumnDefinitions="*,Auto" Padding="5,10" >
+        <Grid ColumnDefinitions="*,Auto,Auto" Padding="5,10" >
             <Label Grid.Column="0" Text="Categories" FontSize="22" FontAttributes="Bold"
                VerticalOptions="Center"
                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
@@ -36,6 +36,23 @@
                     <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Help}"
                     Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+
+            <ImageButton
+               Grid.Column="2"
+               Command="{Binding RefreshCommand}"
+               BackgroundColor="Transparent"
+               Padding="8"
+               WidthRequest="44" 
+               HeightRequest="44"
+               CornerRadius="8"
+               HorizontalOptions="End">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Sync}"
+                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        Size="16" />    
                 </ImageButton.Source>
             </ImageButton>
 

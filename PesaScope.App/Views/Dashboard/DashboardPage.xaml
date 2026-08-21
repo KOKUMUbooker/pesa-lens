@@ -32,32 +32,23 @@
                  VerticalOptions="Center"/>
                 </HorizontalStackLayout>
 
-                <!-- Sync + last-synced label -->
-            <VerticalStackLayout
-             Grid.Column="2"
-             HorizontalOptions="End" >
-
-                <ImageButton
-                 Command="{Binding RefreshCommand}"
-                 BackgroundColor="Transparent"
-                 HeightRequest="32"
-                 WidthRequest="32"
-                 CornerRadius="8"
-                 HorizontalOptions="End">
-                    <ImageButton.Source>
-                        <FontImageSource
-                         FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Sync}"
-                         Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                         Size="16" />
-                    </ImageButton.Source>
-                </ImageButton>
-
-                <Label
-                 Text="{Binding LastSynced}"
-                 FontSize="8"
-                 TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
-                 HorizontalOptions="End"/>
-            </VerticalStackLayout>  
+            <!-- Sync -->
+            <ImageButton
+              Grid.Column="2"
+              Command="{Binding RefreshCommand}"
+              BackgroundColor="Transparent"
+              Padding="8"
+              WidthRequest="44" 
+              HeightRequest="44"
+              CornerRadius="8"
+              HorizontalOptions="End">
+                <ImageButton.Source>
+                    <FontImageSource
+                       FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Sync}"
+                       Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                       Size="16" />
+                </ImageButton.Source>
+            </ImageButton>
         </Grid>
     </Shell.TitleView>
 
