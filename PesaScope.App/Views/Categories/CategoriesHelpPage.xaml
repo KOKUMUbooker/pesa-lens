@@ -61,37 +61,48 @@
 
             <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
 
+            <!-- Section: Income summary -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Why Isn't Income in the Chart?" FontSize="17" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                <Label Text="The spending breakdown only shows money going out, so incoming money — salary, transfers received, etc. — doesn't skew the chart. Instead, total income for the period is shown separately at the top of the screen. Tap it to see the underlying transactions."
+                       FontSize="14" LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+            
             <!-- Section: Creating a category -->
             <VerticalStackLayout Spacing="10">
                 <Label Text="Creating a Category" FontSize="17" FontAttributes="Bold"
-                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="1.  Tap the + icon at the top of the Categories screen." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="1.  Tap the + icon next to the search bar on the Categories tab." FontSize="14"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="2.  Give it a name, e.g. 'Subscriptions'." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="3.  Pick a color to distinguish it in the chart and lists." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="4.  Tap Save." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
             <!-- Section: Creating & linking a rule -->
             <VerticalStackLayout Spacing="10">
                 <Label Text="Creating and Linking a Rule" FontSize="17" FontAttributes="Bold"
-                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="1.  Tap the rule icon at the top of the Categories screen." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                    <Label Text="1.  Tap the + icon next to the search bar on the Rules tab." FontSize="14"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="2.  Choose a Rule Type — see below for what each one matches." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="3.  Enter the Match Value — the text, paybill number, or transaction type to watch for." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="4.  Under 'Assign to Category', pick the category this rule should link to. This is the linking step." FontSize="14" FontAttributes="Bold"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Label Text="5.  Tap Save. Matching transactions — new and future — will now be filed under that category automatically." FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
