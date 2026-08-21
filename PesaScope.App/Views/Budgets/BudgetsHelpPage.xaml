@@ -10,13 +10,24 @@
 
     <Shell.TitleView>
         <Grid ColumnDefinitions="*,Auto" Padding="5,10">
-            <Label Grid.Column="0" Text="How Budgets Work" FontSize="18" FontAttributes="Bold"
-                   VerticalOptions="Center" LineBreakMode="TailTruncation"
+            <Label Grid.Column="0"
+                   Text="How Budgets Work"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   LineBreakMode="TailTruncation"
                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-            <ImageButton Grid.Column="1" Clicked="OnCloseTapped"
-                         BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+
+            <ImageButton Grid.Column="1"
+                         Clicked="OnCloseTapped"
+                         BackgroundColor="Transparent"
+                         Padding="8"
+                         WidthRequest="44"
+                         HeightRequest="44">
                 <ImageButton.Source>
-                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Close}"
+                    <FontImageSource
+                        FontFamily="MaterialSharp"
+                        Glyph="{x:Static m:MaterialSharp.Close}"
                         Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                         Size="20"/>
                 </ImageButton.Source>
@@ -29,80 +40,165 @@
 
             <!-- Section: Two kinds of budget -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Two Kinds of Budget" FontSize="17" FontAttributes="Bold"
+                <Label Text="Two Kinds of Budget"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                <Label Text="This screen tracks two independent things: an Overall budget — one total limit across everything you spend in a month — and Category budgets — separate limits for individual categories like Transport or Food &amp; Groceries. You can use either, both, or neither. They don't affect each other."
-                       FontSize="14" LineHeight="1.3"
+
+                <Label Text="Budgets can be set at two levels: an Overall budget, which limits your total spending for the month, and Category budgets, which set separate limits for individual categories such as Transport or Food &amp; Groceries. You can use either, both, or neither. They are tracked independently."
+                       FontSize="14"
+                       LineHeight="1.3"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
             </VerticalStackLayout>
 
-            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+            <BoxView HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
 
-            <!-- Section: Setting overall budget -->
+            <!-- Section: Overall budget -->
             <VerticalStackLayout Spacing="10">
-                <Label Text="Setting the Overall Budget" FontSize="17" FontAttributes="Bold"
+                <Label Text="Setting the Overall Budget"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="1.  Tap the tune icon at the top of the Budgets screen." FontSize="14"
+                    <Label Text="1.  On the Overall budget card, tap 'Set budget' if you haven't created one yet, or 'Edit' if one already exists."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                    <Label Text="2.  Enter a total monthly limit, e.g. 30,000." FontSize="14"
+
+                    <Label Text="2.  Enter your total monthly spending limit, for example 30,000 KSh."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                    <Label Text="3.  Tap Save. Every transaction you make, in any category, counts toward this figure." FontSize="14"
+
+                    <Label Text="3.  Tap Save. The overall budget tracks your spending across all categories."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                    <Label Text="If you no longer want an overall budget, open Edit and choose 'Remove overall budget'."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <!-- Section: Setting category budget -->
+            <!-- Section: Category budgets -->
             <VerticalStackLayout Spacing="10">
-                <Label Text="Setting a Category Budget" FontSize="17" FontAttributes="Bold"
+                <Label Text="Setting a Category Budget"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="1.  Find the category under 'Category budgets' and tap 'Set limit' (or 'Edit' if one already exists)." FontSize="14"
+                    <Label Text="1.  Find the category under 'Category budgets' and tap 'Set limit' (or 'Edit' if a budget already exists)."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                    <Label Text="2.  Enter a monthly limit for just that category." FontSize="14"
+
+                    <Label Text="2.  Enter the monthly spending limit for that category."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                    <Label Text="3.  Adjust the warning threshold if you want — this decides how close to the limit you get warned, before you actually go over." FontSize="14"
+
+                    <Label Text="3.  Use the warning threshold slider to choose when you want to be warned as you approach the limit."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
-                    <Label Text="4.  Tap Save. Only transactions in that category count toward it." FontSize="14"
+
+                    <Label Text="4.  Turn Notifications on or off for that category."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                    <Label Text="5.  Tap Save. Only spending in that category counts toward its limit."
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                    <Label Text="To remove a category budget, tap the trash icon beside the category."
+                           FontSize="14"
                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+            <BoxView HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
 
-            <!-- Section: Warning threshold explained -->
+            <!-- Section: Understanding the budget cards -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Warning Threshold vs. Limit" FontSize="17" FontAttributes="Bold"
+                <Label Text="Understanding Your Budgets"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                <Label Text="The monthly limit is your hard ceiling. The warning threshold is an earlier checkpoint — for example, at 80% you'll get a heads-up notification before you actually exceed the budget, giving you a chance to slow down."
-                       FontSize="14" LineHeight="1.3"
+
+                <Label Text="Each budget shows how much you've spent compared with your limit, along with a progress bar and a status. Category budgets may also show how your spending compares with the previous month."
+                       FontSize="14"
+                       LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                <Label Text="If a category has no budget, you'll see 'No limit set — tap Set limit to add one.'"
+                       FontSize="14"
+                       LineHeight="1.3"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
             </VerticalStackLayout>
 
-            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+            <BoxView HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+
+            <!-- Section: Warning threshold -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Warning Threshold"
+                       FontSize="17"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
+                <Label Text="The warning threshold determines how close you can get to a category's spending limit before receiving a warning. For example, setting it to 80% means you'll be warned when your spending reaches 80% of the category budget, giving you time to slow down before reaching the limit."
+                       FontSize="14"
+                       LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                <Label Text="The threshold can be adjusted between 50% and 95% when editing a category budget."
+                       FontSize="14"
+                       LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+            </VerticalStackLayout>
+
+            <BoxView HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
 
             <!-- Section: Notifications -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Notifications" FontSize="17" FontAttributes="Bold"
+                <Label Text="Notifications"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                <Label Text="Budget notifications have a master switch under Settings -> Budget Notifications. That switch must be on for any warning or exceeded alerts to fire, for both the overall budget and every category budget. Each category budget also has its own on/off toggle in its edit sheet, so you can silence individual categories while keeping others active."
-                       FontSize="14" LineHeight="1.3"
+
+                <Label Text="Category budgets have their own Notifications switch. Turn it on if you want to receive an alert when your spending approaches that category's limit. Turn it off if you don't want alerts for that category."
+                       FontSize="14"
+                       LineHeight="1.3"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+
+                <Label Text="The overall budget does not have a separate warning threshold or notification switch."
+                       FontSize="14"
+                       LineHeight="1.3"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
             </VerticalStackLayout>
 
-            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
+            <BoxView HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"/>
 
             <!-- Section: History -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Budget History" FontSize="17" FontAttributes="Bold"
+                <Label Text="Budget History"
+                       FontSize="17"
+                       FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
-                <Label Text="At the end of each month, a snapshot of your spending against each budget is saved automatically. Tap the clock icon at the top of this screen to look back at any past month — even categories or the overall budget you've since changed or removed will still show up in that month's history."
-                       FontSize="14" LineHeight="1.3"
+
+                <Label Text="Tap 'View budget history' on the Overall budget card to look back at your previous monthly budget performance. This lets you compare what you spent with the budgets that applied during earlier months."
+                       FontSize="14"
+                       LineHeight="1.3"
                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
             </VerticalStackLayout>
 
-            <Button Text="Got it" Clicked="OnCloseTapped"
-                    HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+            <Button Text="Got it"
+                    Clicked="OnCloseTapped"
+                    HeightRequest="50"
+                    CornerRadius="25"
+                    FontSize="15"
+                    FontAttributes="Bold"
                     Margin="0,10,0,0"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>

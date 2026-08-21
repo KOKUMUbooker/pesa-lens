@@ -121,7 +121,7 @@ public class TransactionRepository(DatabaseService databaseService)
     {
         var transactions = await _db.Table<Transaction>()
             .Where(t => t.TransactionDate >= from && t.TransactionDate <= to
-                    /* && t.Direction == TransactionDirection.Outgoing */)
+                     && t.Direction == TransactionDirection.Outgoing)
             .ToListAsync();
 
         return transactions
