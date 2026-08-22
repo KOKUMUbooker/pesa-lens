@@ -1217,6 +1217,48 @@ public class MpesaSmsParserTests
         Assert.Equal("Safaricom Offers", result.CounterpartyName);
         Assert.Equal("Tunukiwa", result.CounterpartyNumber);
     }
+
+    private const string ImBankReceiveSms =
+        "UHHBO39XXX Confirmed. You have received Ksh800.00 from IM BANK LIMITED- " +
+        "APP on 21/8/26 at 9:18 PM. New M-PESA balance is Ksh3,825.94. " +
+        "Buy goods with M-PESA.";
+
+    [Fact]
+    public void Parse_ImBankReceive_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(ImBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.ReceiveMoney, result.Type);
+        Assert.Equal(TransactionDirection.Incoming, result.Direction);
+    }
+
+    [Fact]
+    public void Parse_ImBankReceive_ExtractsAmountAndName()
+    {
+        var result = _parser.Parse(ImBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(800.00m, result.Amount);
+        Assert.Equal("IM BANK LIMITED- APP", result.CounterpartyName);
+    }
+
+    [Fact]
+    public void Parse_ImBankReceive_ExtractsBalance()
+    {
+        var result = _parser.Parse(ImBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(3825.94m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_BankTransferReceive_RegressionGuard_HyphenatedNameDoesNotBreakExistingSamples()
+    {
+        // Widening the name character class to include hyphens/periods must not
+        // change behavior for previously-working bank samples without punctuation.
+        var kcb = _parser.Parse(KcbBankReceiveSms, SmsId, SmsTimestamp);
+        Assert.NotNull(kcb);
+        Assert.Equal("KCB 1 501901", kcb.CounterpartyName);
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
@@ -1273,6 +1315,9 @@ public class MpesaSmsParserTests
     [InlineData(
         "UHHBO39XXX Confirmed. Ksh100.00 sent to Safaricom Offers for account Tunukiwa on 19/8/26 at 1:00 PM. New M-PESA balance is Ksh2,957.94. Transaction cost, Ksh0.00.",
         TransactionType.PayBill)]
+    [InlineData(
+        "UHHBO39XXX Confirmed. You have received Ksh800.00 from IM BANK LIMITED- APP on 21/8/26 at 9:18 PM. New M-PESA balance is Ksh3,825.94. Buy goods with M-PESA.",
+        TransactionType.ReceiveMoney)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);
