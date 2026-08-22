@@ -143,7 +143,7 @@ public static class ParserPatterns
     public static readonly Regex BankTransferReceivePattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
         @"You have received Ksh(?<amount>[\d,]+\.?\d*) from " +
-        @"(?<name>[A-Za-z][A-Za-z0-9\s]*?) on " +
+        @"(?<name>[A-Za-z][A-Za-z0-9\s\-\.]*?) on " +
         @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.?\s*" +
         @"New M-PESA balance is Ksh(?<balance>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
