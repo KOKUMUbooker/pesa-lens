@@ -1259,6 +1259,29 @@ public class MpesaSmsParserTests
         Assert.Equal("KCB 1 501901", kcb.CounterpartyName);
     }
 
+    private const string ImBankC2BSms =
+        "UXXX1Q38XXX Confirmed. Ksh1,500.00 sent to IM BANK C2B for account " +
+        "5847846463273 on 12/8/26 at 8:04 AM New M-PESA balance is Ksh0.00. " +
+        "Transaction cost, Ksh15.00.";
+
+    [Fact]
+    public void Parse_ImBankC2B_ReturnsPayBillTypeAndOutgoing()
+    {
+        var result = _parser.Parse(ImBankC2BSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.PayBill, result.Type);
+        Assert.Equal(TransactionDirection.Outgoing, result.Direction);
+    }
+
+    [Fact]
+    public void Parse_ImBankC2B_ExtractsMerchantAndAccount()
+    {
+        var result = _parser.Parse(ImBankC2BSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal("IM BANK C2B", result.CounterpartyName);
+        Assert.Equal("5847846463273", result.CounterpartyNumber);
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Theory: real samples return expected types
     // ─────────────────────────────────────────────────────────────────────────
@@ -1318,6 +1341,9 @@ public class MpesaSmsParserTests
     [InlineData(
         "UHHBO39XXX Confirmed. You have received Ksh800.00 from IM BANK LIMITED- APP on 21/8/26 at 9:18 PM. New M-PESA balance is Ksh3,825.94. Buy goods with M-PESA.",
         TransactionType.ReceiveMoney)]
+    [InlineData(
+        "UXXX1Q38XXX Confirmed. Ksh1,500.00 sent to IM BANK C2B for account 5847846463273 on 12/8/26 at 8:04 AM New M-PESA balance is Ksh0.00. Transaction cost, Ksh15.00.",
+        TransactionType.PayBill)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);
