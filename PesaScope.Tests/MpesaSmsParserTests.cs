@@ -224,6 +224,46 @@ public class MpesaSmsParserTests
         Assert.NotNull(result);
     }
 
+    private const string AirtimeForOtherSms =
+        "UHMMK3UV7D confirmed.You bought Ksh25.00 of airtime for 0745964243 on " +
+        "22/8/26 at 2:59 PM.New balance is Ksh60.03. Transaction cost, Ksh0.00.";
+
+    [Fact]
+    public void Parse_AirtimeForOther_ReturnsCorrectTypeAndDirection()
+    {
+        var result = _parser.Parse(AirtimeForOtherSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(TransactionType.AirtimePurchase, result.Type);
+        Assert.Equal(TransactionDirection.Outgoing, result.Direction);
+    }
+
+    [Fact]
+    public void Parse_AirtimeForOther_ExtractsAmountAndPhone()
+    {
+        var result = _parser.Parse(AirtimeForOtherSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(25.00m, result.Amount);
+        Assert.Equal("0745964243", result.CounterpartyNumber);
+    }
+
+    [Fact]
+    public void Parse_AirtimeForOther_ExtractsBalance()
+    {
+        var result = _parser.Parse(AirtimeForOtherSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Equal(60.03m, result.BalanceAfterTransaction);
+    }
+
+    [Fact]
+    public void Parse_AirtimeForOther_DoesNotStealFromSelfAirtimePattern()
+    {
+        // Regression guard: existing self-purchase airtime SMS must still route
+        // to AirtimePattern, not this new for-other-number variant.
+        var result = _parser.Parse(AirtimeSms, SmsId, SmsTimestamp);
+        Assert.NotNull(result);
+        Assert.Null(result.CounterpartyNumber); // self-purchase never captures a phone
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Data Bundle (USSD purchase via M-Pesa, categorized as Airtime)
     // ─────────────────────────────────────────────────────────────────────────
@@ -1344,6 +1384,9 @@ public class MpesaSmsParserTests
     [InlineData(
         "UXXX1Q38XXX Confirmed. Ksh1,500.00 sent to IM BANK C2B for account 5847846463273 on 12/8/26 at 8:04 AM New M-PESA balance is Ksh0.00. Transaction cost, Ksh15.00.",
         TransactionType.PayBill)]
+    [InlineData(
+        "UHMMK3UV7D confirmed.You bought Ksh25.00 of airtime for 0745964243 on 22/8/26 at 2:59 PM.New balance is Ksh60.03. Transaction cost, Ksh0.00.",
+        TransactionType.AirtimePurchase)]
     public void Parse_RealSamples_ReturnsCorrectType(string sms, TransactionType expectedType)
     {
         var result = _parser.Parse(sms, SmsId, SmsTimestamp);
