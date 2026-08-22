@@ -71,6 +71,15 @@ public static class ParserPatterns
         @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
+    public static readonly Regex AirtimeForOtherPattern = new(
+        @"^(?<code>[A-Z0-9]{8,12}) [Cc]onfirmed\." +
+        @"\s*You bought Ksh(?<amount>[\d,]+\.?\d*) of airtime for " +
+        @"(?<phone>\d{9,12}) on " +
+        @"(?<date>[\d/]+) at (?<time>[\d:]+\s*[AP]M)\.\s*" +
+        @"New balance is Ksh(?<balance>[\d,]+\.?\d*)\." +
+        @"\s*Transaction cost,?\s*Ksh(?<cost>[\d,]+\.?\d*)\.",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
     public static readonly Regex DataBundlePattern = new(
         @"^(?<code>[A-Z0-9]{8,12}) Confirmed\.\s*" +
         @"Ksh(?<amount>[\d,]+\.?\d*) sent to " +
