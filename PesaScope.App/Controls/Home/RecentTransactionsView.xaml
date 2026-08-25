@@ -10,12 +10,12 @@
     x:Name="this">
 
     <ContentView.Resources>
-        <converters:TransactionTypeToIconConverter x:Key="TypeToEmoji" />
-        <converters:TransactionTypeToSignConverter   x:Key="TypeToSign"/>
-        <converters:TransactionTypeToColorConverter  x:Key="TypeToColor"/>
-        <converters:IntIsZeroConverter               x:Key="IntIsZero"/>
-        <converters:IntIsNonZeroConverter            x:Key="IntIsNonZero"/>
-        <converters:UtcToLocalDateConverter          x:Key="UtcToLocalDateConverter"/>
+        <converters:TransactionPageTypeToColorConverter  x:Key="TypeToColor"/>
+        <converters:TransactionTypeToIconConverter       x:Key="TypeToEmoji" />
+        <converters:TransactionTypeToSignConverter       x:Key="TypeToSign"/>
+        <converters:IntIsZeroConverter                   x:Key="IntIsZero"/>
+        <converters:IntIsNonZeroConverter                x:Key="IntIsNonZero"/>
+        <converters:UtcToLocalDateConverter              x:Key="UtcToLocalDateConverter"/>
     </ContentView.Resources>
 
     <VerticalStackLayout Spacing="10">
