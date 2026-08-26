@@ -36,4 +36,10 @@ public interface IAutoCategorizationRuleRepository : IRepository<AutoCategorizat
     /// Called when a category is deleted.
     /// </summary>
     Task DeleteByCategoryAsync(int categoryId);
+
+    Task<bool> ExistsAsync(RuleType ruleType, string matchValue);
+
+    Task<bool> TryInsertAsync(AutoCategorizationRule rule);
+
+    Task<bool> TryUpdateAsync(AutoCategorizationRule rule);
 }
