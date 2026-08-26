@@ -26,12 +26,21 @@
 
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
-        <HorizontalStackLayout Padding="0,10" >
-           
-            <Label Text="Transaction detail" FontSize="20" FontAttributes="Bold"
-                   VerticalOptions="Center"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-        </HorizontalStackLayout>
+        <Grid ColumnDefinitions="*,Auto" Padding="0,10">
+            <Label Grid.Column="0" Text="Transaction detail" FontSize="20" FontAttributes="Bold"
+               VerticalOptions="Center"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+
+            <ImageButton Grid.Column="1"
+             Command="{Binding OpenInfoSheetCommand}"
+             BackgroundColor="Transparent" Padding="8" WidthRequest="44" HeightRequest="44">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Info}"
+                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
     </Shell.TitleView>
 
     <!-- ── Bottom sheets ─────────────────────────────────────────────────── -->
@@ -161,6 +170,108 @@
             </VerticalStackLayout>
         </material:BottomSheetView>
 
+        <!-- Create rule sheet -->
+        <material:BottomSheetView
+            x:Name="CreateRuleSheet"
+            IsPresented="{Binding IsCreateRuleSheetOpen}"
+            IsVisible="{Binding IsCreateRuleSheetOpen}"
+            CloseOnTapOutside="False"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+            <VerticalStackLayout Padding="24,12,24,48" Spacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Create a Rule" FontSize="18" FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    <Label Text="Future transactions matching this will be categorized automatically."
+                       FontSize="12" HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="RULE TYPE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Picker ItemsSource="{Binding RuleTypes}"
+                            SelectedItem="{Binding RuleType}"
+                            FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="MATCH VALUE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,0">
+                        <Entry Text="{Binding RuleMatchValue}" Placeholder="e.g. NAIVAS or 888880"
+                            FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="ASSIGN TO CATEGORY" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
+                        <Picker ItemsSource="{Binding Categories}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding RuleTargetCategory}"
+                            FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" Text="Cancel" Command="{Binding CloseSheetCommand}"
+                        HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                    <Button Grid.Column="1" Text="Create" Command="{Binding SaveNewRuleCommand}"
+                        HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </material:BottomSheetView>
+
+        <!-- Info / tips sheet -->
+        <material:BottomSheetView
+            x:Name="InfoSheet"
+            IsPresented="{Binding IsInfoSheetOpen}"
+            IsVisible="{Binding IsInfoSheetOpen}"
+            CloseOnTapOutside="True"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+            <VerticalStackLayout Padding="24,12,24,48" Spacing="16">
+                <Label Text="Tips" FontSize="18" FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                    StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,12">
+                    <HorizontalStackLayout Spacing="10">
+                        <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Start">
+                            <Image.Source>
+                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Auto_fix}"
+                            Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Size="18"/>
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="13" LineBreakMode="WordWrap"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}">
+                            <Label.Text>Creating a rule here only applies going forward and to this transaction. If you want it applied to all your existing transactions too, go to the Categories screen and tap "Auto-categorize transactions".</Label.Text>
+                        </Label>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Button Text="Got it" Command="{Binding CloseSheetCommand}"
+                    HeightRequest="50" CornerRadius="25" FontSize="15" FontAttributes="Bold"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}"/>
+            </VerticalStackLayout>
+        </material:BottomSheetView>
+        
     </uranium:UraniumContentPage.Attachments>
 
     <!-- ── Main content ───────────────────────────────────────────────────── -->
@@ -298,14 +409,26 @@
                         </Border>
                     </Grid>
 
-                    <!-- Uncategorized hint -->
-                    <Border Padding="16,10"
-                        IsVisible="{Binding SelectedCategory.Name, Converter={StaticResource IsEqualConverter}, ConverterParameter='Uncategorized'}"
+                    <!-- Uncategorized hint → CTA to create a rule -->
+                    <Border Padding="16,12"
+                        IsVisible="{Binding IsUncategorized}"
                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}">
-                        <Label FontSize="12.5" LineBreakMode="WordWrap"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}">
-                            <Label.Text>You can create a rule on the Categories screen so transactions like this are categorized automatically next time.</Label.Text>
-                        </Label>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenCreateRuleSheetCommand}"/>
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Label Grid.Column="0" FontSize="12.5" LineBreakMode="WordWrap" VerticalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}">
+                                <Label.Text>This transaction is uncategorized. Create a rule so transactions like this get categorized automatically.</Label.Text>
+                            </Label>
+                            <Image Grid.Column="1" VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Chevron_right}"
+                                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
 
                 </VerticalStackLayout>

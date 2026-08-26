@@ -1,5 +1,4 @@
-﻿using Android.Widget;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PesaScope.App.Data.Repositories.Interfaces;
 using PesaScope.Core.Models;
@@ -12,6 +11,7 @@ public partial class TransactionDetailViewModel : ObservableObject
 {
     private readonly ITransactionRepository _transactionRepo;
     private readonly ICategoryRepository _categoryRepo;
+    private readonly IAutoCategorizationRuleRepository _rulesRepo;
 
     // ── Query property ────────────────────────────────────────────────────────
     [ObservableProperty] private string _mpesaCode = string.Empty;
@@ -26,6 +26,17 @@ public partial class TransactionDetailViewModel : ObservableObject
     [ObservableProperty] private bool _isNoteSheetOpen;
     [ObservableProperty] private bool _isCategorySheetOpen;
     [ObservableProperty] private string _editNote = string.Empty;
+
+    // ── Create-rule sheet state ───────────────────────────────────────────────
+    [ObservableProperty] private bool _isCreateRuleSheetOpen;
+    [ObservableProperty] private string _ruleMatchValue = string.Empty;
+    [ObservableProperty] private RuleType _ruleType = RuleType.ContainsText;
+    [ObservableProperty] private Category? _ruleTargetCategory;
+
+    public List<RuleType> RuleTypes { get; } = Enum.GetValues<RuleType>().ToList();
+
+    // ── Info sheet state ──────────────────────────────────────────────────────
+    [ObservableProperty] private bool _isInfoSheetOpen;
 
     // ── Derived display properties ────────────────────────────────────────────
     public string FormattedAmount => Transaction is null
@@ -47,12 +58,18 @@ public partial class TransactionDetailViewModel : ObservableObject
 
     public string AmountPrefix => IsCredit ? "+" : "-";
 
+    public bool IsUncategorized => SelectedCategory?.Name == "Uncategorized";
+
+    partial void OnSelectedCategoryChanged(Category? value) => OnPropertyChanged(nameof(IsUncategorized));
+
     public TransactionDetailViewModel(
         ITransactionRepository transactionRepo,
-        ICategoryRepository categoryRepo)
+        ICategoryRepository categoryRepo,
+        IAutoCategorizationRuleRepository rulesRepo)
     {
         _transactionRepo = transactionRepo;
         _categoryRepo = categoryRepo;
+        _rulesRepo = rulesRepo;
     }
 
     // ── Load ──────────────────────────────────────────────────────────────────
@@ -132,11 +149,56 @@ public partial class TransactionDetailViewModel : ObservableObject
         IsNoteSheetOpen = false;
     }
 
+    // ── Create rule from this transaction ────────────────────────────────────
+
+    [RelayCommand]
+    public void OpenCreateRuleSheet()
+    {
+        if (Transaction is null) return;
+
+        // Prefill with sensible defaults from the transaction itself.
+        RuleType = RuleType.ContainsText;
+        RuleMatchValue = Transaction.CounterpartyName;
+        RuleTargetCategory = null;
+        IsCreateRuleSheetOpen = true;
+    }
+
+    [RelayCommand]
+    public async Task SaveNewRuleAsync()
+    {
+        if (Transaction is null || RuleTargetCategory is null || string.IsNullOrWhiteSpace(RuleMatchValue))
+            return;
+
+        await _rulesRepo.InsertAsync(new AutoCategorizationRule
+        {
+            RuleType = RuleType,
+            MatchValue = RuleMatchValue.Trim(),
+            CategoryId = RuleTargetCategory.Id,
+            Priority = 5,
+            IsEnabled = true,
+            CreatedAt = DateTime.UtcNow
+        });
+
+        // Apply the new rule's category to this transaction right away.
+        await _transactionRepo.UpdateCategoryAsync(Transaction.MpesaCode, RuleTargetCategory.Id);
+        Transaction.CategoryId = RuleTargetCategory.Id;
+        SelectedCategory = Categories.FirstOrDefault(c => c.Id == RuleTargetCategory.Id);
+
+        IsCreateRuleSheetOpen = false;
+    }
+
+    // ── Info sheet ────────────────────────────────────────────────────────────
+
+    [RelayCommand]
+    public void OpenInfoSheet() => IsInfoSheetOpen = true;
+
     [RelayCommand]
     public void CloseSheet()
     {
         IsNoteSheetOpen = false;
         IsCategorySheetOpen = false;
+        IsCreateRuleSheetOpen = false;
+        IsInfoSheetOpen = false;
     }
 
     [RelayCommand]
