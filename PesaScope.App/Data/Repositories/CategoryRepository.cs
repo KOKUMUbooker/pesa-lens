@@ -1,5 +1,6 @@
 ﻿using PesaScope.App.Data.Repositories.Interfaces;
 using PesaScope.Core.Models;
+using SQLite;
 
 namespace PesaScope.App.Data.Repositories;
 
@@ -22,6 +23,32 @@ public class CategoryRepository(DatabaseService databaseService)
         await _db.Table<Category>()
                  .Where(c => c.Name.ToLower() == name.ToLower())
                  .FirstOrDefaultAsync();
+
+    public async Task<bool> TryInsertAsync(Category category)
+    {
+        try
+        {
+            await _db.InsertAsync(category);
+            return true;
+        }
+        catch (SQLiteException ex) when (ex.Result == SQLite3.Result.Constraint)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> TryUpdateAsync(Category category)
+    {
+        try
+        {
+            await _db.UpdateAsync(category);
+            return true;
+        }
+        catch (SQLiteException ex) when (ex.Result == SQLite3.Result.Constraint)
+        {
+            return false;
+        }
+    }
 
     public async Task<Category> GetUncategorizedAsync()
     {
