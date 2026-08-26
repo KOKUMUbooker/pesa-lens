@@ -37,4 +37,8 @@ public interface ICategoryRepository : IRepository<Category>
     /// Throws InvalidOperationException if called on a system category.
     /// </summary>
     Task DeleteAndReassignAsync(int categoryId);
+
+    Task<bool> TryInsertAsync(Category category);
+
+    Task<bool> TryUpdateAsync(Category category);
 }
