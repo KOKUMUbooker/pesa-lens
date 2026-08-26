@@ -190,22 +190,38 @@
                 <VerticalStackLayout Spacing="6">
                     <Label Text="RULE TYPE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
                         TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Label Text="How the match value below should be compared against a transaction."
+                        FontSize="11"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding RuleTypes}"
-                            SelectedItem="{Binding RuleType}"
-                            FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        <Grid>
+                            <Picker ItemsSource="{Binding RuleTypes}"
+                                SelectedItem="{Binding RuleType}"
+                                FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="MATCH VALUE" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
                         TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Label Text="The counterparty name or M-Pesa till/paybill number to match on."
+                        FontSize="11"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,0">
                         <Entry Text="{Binding RuleMatchValue}" Placeholder="e.g. NAIVAS or 888880"
                             FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                            PlaceholderColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
                             TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
                     </Border>
                 </VerticalStackLayout>
@@ -213,13 +229,25 @@
                 <VerticalStackLayout Spacing="6">
                     <Label Text="ASSIGN TO CATEGORY" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
                         TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                    <Label Text="Matching transactions will be placed in this category automatically."
+                        FontSize="11"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"/>
                     <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,4">
-                        <Picker ItemsSource="{Binding Categories}"
-                            ItemDisplayBinding="{Binding Name}"
-                            SelectedItem="{Binding RuleTargetCategory}"
-                            FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                        <Grid>
+                            <Picker ItemsSource="{Binding Categories}"
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding RuleTargetCategory}"
+                                FontSize="14" HeightRequest="48" BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"/>
+                            <Image InputTransparent="True" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,4,0">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Keyboard_arrow_down}"
+                                        Color="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}"
+                                        Size="18"/>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 
