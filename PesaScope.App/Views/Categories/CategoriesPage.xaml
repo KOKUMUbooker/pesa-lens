@@ -22,7 +22,7 @@
         <converters:StringToColorConverter x:Key="StringToColorConverter"/>
         <converters:BoolToRotationConverter x:Key="BoolToRotationConverter"/>
     </uranium:UraniumContentPage.Resources>
-
+    
     <!-- ── Title bar ─────────────────────────────────────────────────────── -->
     <Shell.TitleView>
         <Grid ColumnDefinitions="*,Auto,Auto" Padding="5,10" >
@@ -670,8 +670,7 @@
                     <material:TabItem Title="Rules">
                         <material:TabItem.Content>
                             <VerticalStackLayout Spacing="10" Padding="0,12,0,0">
-                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="4,0,4,4">
-
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="4,0,4,4">
                                     <!-- Search box -->
                                     <Border Grid.Column="0"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
@@ -714,22 +713,40 @@
                                             </Image>
                                         </Grid>
                                     </Border>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="8" Padding="4,0,4,4">
+                                    <Button
+                                        Grid.Column="0"
+                                        Text="{Binding AutoCategorizeButtonText}"
+                                        Command="{Binding AutoCategorizeAllCommand}"
+                                        IsEnabled="{Binding IsAutoCategorizing, Converter={StaticResource InvertedBoolConverter}}"
+                                        HeightRequest="46" CornerRadius="23" FontSize="14" FontAttributes="Bold"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Auto_fix}"
+                                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                                Size="16"/>
+                                        </Button.ImageSource>
+                                    </Button>
 
                                     <!-- Add rule button -->
-                                    <Border Grid.Column="2" WidthRequest="44" HeightRequest="44"
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Add rule"
+                                        Command="{Binding OpenAddRuleCommand}"
+                                        HeightRequest="46" CornerRadius="23" FontSize="14" FontAttributes="Bold"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
-                                        StrokeThickness="0" StrokeShape="RoundRectangle 12">
-                                        <ImageButton Command="{Binding OpenAddRuleCommand}"
-                                            BackgroundColor="Transparent" Padding="10">
-                                            <ImageButton.Source>
-                                                <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
-                                                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                                    Size="20"/>
-                                            </ImageButton.Source>
-                                        </ImageButton>
-                                    </Border>
+                                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Add}"
+                                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                                Size="18"/>
+                                        </Button.ImageSource>
+                                    </Button>
                                 </Grid>
-                                
+
                                 <Border
                                     BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
                                     Stroke="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
