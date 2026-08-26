@@ -1,5 +1,6 @@
 ﻿using PesaScope.App.Data.Repositories.Interfaces;
 using PesaScope.Core.Models;
+using SQLite;
 
 namespace PesaScope.App.Data.Repositories;
 
@@ -31,6 +32,40 @@ public class AutoCategorizationRuleRepository(DatabaseService databaseService)
 
         rule.IsEnabled = isEnabled;
         return await _db.UpdateAsync(rule);
+    }
+
+    public async Task<bool> TryInsertAsync(AutoCategorizationRule rule)
+    {
+        try
+        {
+            await _db.InsertAsync(rule);
+            return true;
+        }
+        catch (SQLiteException ex) when (ex.Result == SQLite3.Result.Constraint)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> TryUpdateAsync(AutoCategorizationRule rule)
+    {
+        try
+        {
+            await _db.UpdateAsync(rule);
+            return true;
+        }
+        catch (SQLiteException ex) when (ex.Result == SQLite3.Result.Constraint)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> ExistsAsync(RuleType ruleType, string matchValue)
+    {
+        var count = await _db.ExecuteScalarAsync<int>(
+            "SELECT COUNT(*) FROM AutoCategorizationRules WHERE rule_type = ? AND match_value = ? COLLATE NOCASE",
+            (int)ruleType, matchValue);
+        return count > 0;
     }
 
     public async Task SeedDefaultsAsync()
