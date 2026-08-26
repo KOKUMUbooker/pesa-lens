@@ -4,6 +4,7 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using PesaScope.App.Data.Repositories.Interfaces;
+using PesaScope.App.Services.Interfaces;
 using PesaScope.Core.Models;
 using SkiaSharp;
 using System.Collections.ObjectModel;
@@ -49,6 +50,7 @@ public partial class CategoriesViewModel : ObservableObject
     private readonly ICategoryRepository _categoryRepo;
     private readonly ITransactionRepository _transactionRepo;
     private readonly IAutoCategorizationRuleRepository _rulesRepo;
+    private readonly IAutoCategorizationService _autoCategorizationService;
 
     // Sentinel used to represent "no filter" in the rule category filter picker.
     private static readonly Category AllCategoriesOption = new()
@@ -136,6 +138,7 @@ public partial class CategoriesViewModel : ObservableObject
     [ObservableProperty] private RuleType _ruleType = RuleType.ContainsText;
     [ObservableProperty] private Category? _ruleTargetCategory;
     [ObservableProperty] private AutoCategorizationRule? _editingRule;
+    [ObservableProperty] private bool _isAutoCategorizing;
 
     // ── Resolved period (set by LoadChartAsync, read by the page for navigation) ──
     public DateTime PeriodStart { get; private set; }
@@ -147,14 +150,23 @@ public partial class CategoriesViewModel : ObservableObject
 
     partial void OnIncomeRowChanged(CategorySpendRow? value) => OnPropertyChanged(nameof(HasIncome));
 
+    public string AutoCategorizeButtonText => IsAutoCategorizing
+        ? "Categorizing…"
+        : "Auto-categorize transactions";
+
+    partial void OnIsAutoCategorizingChanged(bool value) =>
+        OnPropertyChanged(nameof(AutoCategorizeButtonText));
+
     public CategoriesViewModel(
         ICategoryRepository categoryRepo,
         ITransactionRepository transactionRepo,
-        IAutoCategorizationRuleRepository rulesRepo)
+        IAutoCategorizationRuleRepository rulesRepo,
+        IAutoCategorizationService autoCategorizationService)
     {
         _categoryRepo = categoryRepo;
         _transactionRepo = transactionRepo;
         _rulesRepo = rulesRepo;
+        _autoCategorizationService = autoCategorizationService;
 
         // Default the rule filter to "All Categories" so the picker has a sane initial selection.
         RuleFilterCategory = AllCategoriesOption;
@@ -471,6 +483,39 @@ public partial class CategoriesViewModel : ObservableObject
         CategoriesEmptyMessage = _allCategoryRows.Count == 0
             ? "No categories to show."
             : "No categories match your search or filters.";
+    }
+
+    [RelayCommand]
+    public async Task AutoCategorizeAllAsync()
+    {
+        if (IsAutoCategorizing) return;
+
+        bool confirmed = await Shell.Current.DisplayAlertAsync(
+            "Auto-Categorize Transactions",
+            "This applies your current rules to every transaction, overwriting the category on any transaction that matches a rule. This can't be undone.",
+            "Continue",
+            "Cancel");
+
+        if (!confirmed) return;
+
+        IsAutoCategorizing = true;
+        try
+        {
+            int updated = await _autoCategorizationService.RecategorizeAllAsync();
+
+            await Shell.Current.DisplayAlertAsync(
+                "Done",
+                updated == 0
+                    ? "No transactions matched your rules."
+                    : $"{updated} transaction(s) were categorized.",
+                "OK");
+
+            await LoadAsync();
+        }
+        finally
+        {
+            IsAutoCategorizing = false;
+        }
     }
 
     // ── Add / Edit category (4.4, 4.5) ───────────────────────────────────────
