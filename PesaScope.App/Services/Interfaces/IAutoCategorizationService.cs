@@ -12,4 +12,5 @@ public interface IAutoCategorizationService
     /// CategoryId immediately after categorization (e.g. for budget notifications).
     /// </summary>
     Task<int?> CategorizeAndGetCategoryIdAsync(Transaction transaction);
+    Task<int> RecategorizeAllAsync();
 }
