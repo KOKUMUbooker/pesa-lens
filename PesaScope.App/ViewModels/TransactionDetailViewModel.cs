@@ -169,17 +169,36 @@ public partial class TransactionDetailViewModel : ObservableObject
         if (Transaction is null || RuleTargetCategory is null || string.IsNullOrWhiteSpace(RuleMatchValue))
             return;
 
-        await _rulesRepo.InsertAsync(new AutoCategorizationRule
+        var trimmedValue = RuleMatchValue.Trim();
+
+        if (await _rulesRepo.ExistsAsync(RuleType, trimmedValue))
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Rule Already Exists",
+                $"A rule already exists for '{trimmedValue}' with this rule type.",
+                "OK");
+            return;
+        }
+
+        bool inserted = await _rulesRepo.TryInsertAsync(new AutoCategorizationRule
         {
             RuleType = RuleType,
-            MatchValue = RuleMatchValue.Trim(),
+            MatchValue = trimmedValue,
             CategoryId = RuleTargetCategory.Id,
             Priority = 5,
             IsEnabled = true,
             CreatedAt = DateTime.UtcNow
         });
 
-        // Apply the new rule's category to this transaction right away.
+        if (!inserted)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Rule Already Exists",
+                $"A rule already exists for '{trimmedValue}' with this rule type.",
+                "OK");
+            return;
+        }
+
         await _transactionRepo.UpdateCategoryAsync(Transaction.MpesaCode, RuleTargetCategory.Id);
         Transaction.CategoryId = RuleTargetCategory.Id;
         SelectedCategory = Categories.FirstOrDefault(c => c.Id == RuleTargetCategory.Id);

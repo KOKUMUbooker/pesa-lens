@@ -555,11 +555,27 @@ public partial class CategoriesViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(EditName)) return;
 
+        var trimmedName = EditName.Trim();
+
+        bool isDuplicateCheckNeeded = EditingCategory is null
+            || !EditingCategory.Name.Equals(trimmedName, StringComparison.OrdinalIgnoreCase);
+
+        if (isDuplicateCheckNeeded && await _categoryRepo.GetByNameAsync(trimmedName) is not null)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Category Already Exists",
+                $"A category named '{trimmedName}' already exists.",
+                "OK");
+            return;
+        }
+
+        bool success;
+
         if (EditingCategory is null)
         {
-            await _categoryRepo.InsertAsync(new Category
+            success = await _categoryRepo.TryInsertAsync(new Category
             {
-                Name = EditName.Trim(),
+                Name = trimmedName,
                 Icon = EditIcon,
                 Color = EditColor,
                 IsSystemCategory = false,
@@ -568,10 +584,19 @@ public partial class CategoriesViewModel : ObservableObject
         }
         else
         {
-            EditingCategory.Name = EditName.Trim();
+            EditingCategory.Name = trimmedName;
             EditingCategory.Icon = EditIcon;
             EditingCategory.Color = EditColor;
-            await _categoryRepo.UpdateAsync(EditingCategory);
+            success = await _categoryRepo.TryUpdateAsync(EditingCategory);
+        }
+
+        if (!success)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Category Already Exists",
+                $"A category named '{trimmedName}' already exists.",
+                "OK");
+            return;
         }
 
         IsSheetOpen = false;
@@ -621,12 +646,29 @@ public partial class CategoriesViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(RuleMatchValue) || RuleTargetCategory is null) return;
 
+        var trimmedValue = RuleMatchValue.Trim();
+
+        bool isDuplicateCheckNeeded = EditingRule is null
+            || EditingRule.RuleType != RuleType
+            || !EditingRule.MatchValue.Equals(trimmedValue, StringComparison.OrdinalIgnoreCase);
+
+        if (isDuplicateCheckNeeded && await _rulesRepo.ExistsAsync(RuleType, trimmedValue))
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Rule Already Exists",
+                $"A rule already exists for '{trimmedValue}' with this rule type.",
+                "OK");
+            return;
+        }
+
+        bool success;
+
         if (EditingRule is null)
         {
-            await _rulesRepo.InsertAsync(new AutoCategorizationRule
+            success = await _rulesRepo.TryInsertAsync(new AutoCategorizationRule
             {
                 RuleType = RuleType,
-                MatchValue = RuleMatchValue.Trim(),
+                MatchValue = trimmedValue,
                 CategoryId = RuleTargetCategory.Id,
                 Priority = 5,
                 IsEnabled = true,
@@ -636,9 +678,20 @@ public partial class CategoriesViewModel : ObservableObject
         else
         {
             EditingRule.RuleType = RuleType;
-            EditingRule.MatchValue = RuleMatchValue.Trim();
+            EditingRule.MatchValue = trimmedValue;
             EditingRule.CategoryId = RuleTargetCategory!.Id;
-            await _rulesRepo.UpdateAsync(EditingRule);
+            success = await _rulesRepo.TryUpdateAsync(EditingRule);
+        }
+
+        if (!success)
+        {
+            // Defense-in-depth: the checks above should already have caught this,
+            // but the unique index is the real source of truth.
+            await Shell.Current.DisplayAlertAsync(
+                "Rule Already Exists",
+                $"A rule already exists for '{trimmedValue}' with this rule type.",
+                "OK");
+            return;
         }
 
         IsRuleSheetOpen = false;
