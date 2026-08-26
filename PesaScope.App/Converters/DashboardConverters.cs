@@ -51,20 +51,62 @@ public class TransactionTypeToEmojiConverter : IValueConverter
 }
 
 /// <summary>
-/// Maps a TransactionType to a sign prefix string ("+" or "-") for formatting the amount label.
+/// Maps a TransactionDirection to a sign prefix for the amount label.
+/// Incoming -> "+"; outgoing -> "-".
+/// Falls back to empty string for unknown/unset direction.
 /// </summary>
 public class TransactionTypeToSignConverter : IValueConverter
 {
-    private static readonly HashSet<TransactionType> _incoming = new()
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        TransactionType.ReceiveMoney,
-        TransactionType.Deposit,
-        TransactionType.Reversal,
-    };
+        if (value is not TransactionDirection direction)
+            return string.Empty;
 
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value is TransactionType t && _incoming.Contains(t) ? "+" : "-";
+        return direction switch
+        {
+            TransactionDirection.Incoming => "+",
+            TransactionDirection.Outgoing => "-",
+            _ => string.Empty,
+        };
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotSupportedException();
+}
+
+
+/// <summary>
+/// Maps a TransactionDirection to a MAUI Color for the amount label.
+/// Incoming -> Primary (green); outgoing -> Tertiary (red-orange).
+/// Falls back to OnSurface for unknown/unset direction.
+/// </summary>
+public class TransactionTypeToColorConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not TransactionDirection direction)
+            return GetThemeColor("OnSurface");
+
+        return direction switch
+        {
+            TransactionDirection.Incoming => GetThemeColor("Primary"),
+            TransactionDirection.Outgoing => GetThemeColor("Tertiary"),
+            _ => GetThemeColor("OnSurface"),
+        };
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+
+    private static Color GetThemeColor(string key)
+    {
+        if (Application.Current?.Resources.TryGetValue(key, out var raw) == true && raw is Color c)
+            return c;
+        return key switch
+        {
+            "Primary" => Color.FromArgb("#1A8C62"),
+            "Tertiary" => Color.FromArgb("#D4522A"),
+            _ => Color.FromArgb("#1A2E26"),
+        };
+    }
 }

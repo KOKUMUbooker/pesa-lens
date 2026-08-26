@@ -10,12 +10,12 @@
     x:Name="this">
 
     <ContentView.Resources>
-        <converters:TransactionPageTypeToColorConverter  x:Key="TypeToColor"/>
-        <converters:TransactionTypeToIconConverter       x:Key="TypeToEmoji" />
-        <converters:TransactionTypeToSignConverter       x:Key="TypeToSign"/>
-        <converters:IntIsZeroConverter                   x:Key="IntIsZero"/>
-        <converters:IntIsNonZeroConverter                x:Key="IntIsNonZero"/>
-        <converters:UtcToLocalDateConverter              x:Key="UtcToLocalDateConverter"/>
+        <converters:TransactionTypeToColorConverter  x:Key="TypeToColor"/>
+        <converters:TransactionTypeToIconConverter   x:Key="TypeToEmoji" />
+        <converters:TransactionTypeToSignConverter   x:Key="TypeToSign"/>
+        <converters:IntIsZeroConverter               x:Key="IntIsZero"/>
+        <converters:IntIsNonZeroConverter            x:Key="IntIsNonZero"/>
+        <converters:UtcToLocalDateConverter          x:Key="UtcToLocalDateConverter"/>
     </ContentView.Resources>
 
     <VerticalStackLayout Spacing="10">
@@ -105,10 +105,10 @@
                                 FontSize="15"
                                 FontAttributes="Bold"
                                 VerticalOptions="Center"
-                                TextColor="{Binding Type, Converter={StaticResource TypeToColor}}">
+                                TextColor="{Binding Direction, Converter={StaticResource TypeToColor}}">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{}{0}Ksh {1:N0}">
-                                        <Binding Path="Type" Converter="{StaticResource TypeToSign}"/>
+                                        <Binding Path="Direction" Converter="{StaticResource TypeToSign}"/>
                                         <Binding Path="Amount"/>
                                     </MultiBinding>
                                 </Label.Text>
