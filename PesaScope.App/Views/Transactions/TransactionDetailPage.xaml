@@ -278,19 +278,19 @@
 
                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                     StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14,12">
-                    <HorizontalStackLayout Spacing="10">
-                        <Image WidthRequest="20" HeightRequest="20" VerticalOptions="Start">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Image Grid.Column="0" WidthRequest="20" HeightRequest="20" VerticalOptions="Start">
                             <Image.Source>
                                 <FontImageSource FontFamily="MaterialSharp" Glyph="{x:Static m:MaterialSharp.Auto_fix}"
-                            Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                            Size="18"/>
+                                    Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                    Size="18"/>
                             </Image.Source>
                         </Image>
-                        <Label FontSize="13" LineBreakMode="WordWrap"
+                        <Label Grid.Column="1" FontSize="13" LineBreakMode="WordWrap"
                             TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}">
                             <Label.Text>Creating a rule here only applies going forward and to this transaction. If you want it applied to all your existing transactions too, go to the Categories screen and tap "Auto-categorize transactions".</Label.Text>
                         </Label>
-                    </HorizontalStackLayout>
+                    </Grid>
                 </Border>
 
                 <Button Text="Got it" Command="{Binding CloseSheetCommand}"
