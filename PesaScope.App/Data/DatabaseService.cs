@@ -32,7 +32,15 @@ public class DatabaseService
 
         await _db.CreateTableAsync<Transaction>();
         await _db.CreateTableAsync<Category>();
+        // Make the index case-insensitive for category names
+        await _db.ExecuteAsync(
+            @"CREATE UNIQUE INDEX IF NOT EXISTS idx_categories_name_unique
+              ON Categories(name COLLATE NOCASE)");
         await _db.CreateTableAsync<AutoCategorizationRule>();
+        // To set DB-level combined uniqueness for rule_type and match_value fields in AutoCategorizationRule
+        await _db.ExecuteAsync(
+            @"CREATE UNIQUE INDEX IF NOT EXISTS idx_rules_type_value_unique
+          ON AutoCategorizationRules(rule_type, match_value COLLATE NOCASE)");
         await _db.CreateTableAsync<Budget>();
         await _db.CreateTableAsync<OverallBudget>();
         await _db.CreateTableAsync<SyncMetadata>();
