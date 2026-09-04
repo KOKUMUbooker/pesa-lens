@@ -14,293 +14,95 @@
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Padding="32,64,32,24" Spacing="0">
 
-                <!-- ── Step indicator ─────────────────────────────────── -->
-                <HorizontalStackLayout
-                    x:Name="StepIndicator"
+                <Border
                     HorizontalOptions="Center"
-                    Spacing="8"
+                    WidthRequest="100" HeightRequest="100"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
+                    StrokeThickness="0"
                     Margin="0,0,0,32">
-                    <Border
-                        x:Name="Step1Dot"
-                        WidthRequest="28" HeightRequest="28"
-                        StrokeThickness="0"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
-                        <Border.StrokeShape>
-                            <Ellipse />
-                        </Border.StrokeShape>
-                        <Label Text="1" FontSize="12" FontAttributes="Bold"
-                             HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-                    <BoxView
-                        WidthRequest="32" HeightRequest="2"
-                        VerticalOptions="Center" CornerRadius="1"
-                        Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}" />
-                    <Border
-                        x:Name="Step2Dot"
-                        WidthRequest="28" HeightRequest="28"
-                        StrokeThickness="0"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}">
-                        <Border.StrokeShape>
-                            <Ellipse />
-                        </Border.StrokeShape>
-                        <Label x:Name="Step2Label" Text="2" FontSize="12" FontAttributes="Bold"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
-                            HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-                </HorizontalStackLayout>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="28" />
+                    </Border.StrokeShape>
+                    <Label Text="📩" FontSize="44"
+                        HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
 
-                <!-- ══════════════════════════════════════════════════════
-                     STEP 1 — Receive SMS permission
-                ══════════════════════════════════════════════════════ -->
-                <VerticalStackLayout x:Name="Step1View" Spacing="0">
+                <Label
+                    Text="Read your M-Pesa messages"
+                    FontSize="26" FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    TextColor="{AppThemeBinding Light={StaticResource OnBackground}, Dark={StaticResource OnBackgroundDark}}"
+                    Margin="0,0,0,12" />
 
-                    <Border
-                        HorizontalOptions="Center"
-                        WidthRequest="100" HeightRequest="100"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
-                        StrokeThickness="0"
-                        Margin="0,0,0,32">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="28" />
-                        </Border.StrokeShape>
-                        <Label Text="📩" FontSize="44"
-                            HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
+                <Label
+                    Text="PesaScope needs SMS permission to import your existing M-Pesa history and automatically capture new transactions."
+                    FontSize="15" LineHeight="1.5"
+                    HorizontalTextAlignment="Center"
+                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
+                    Margin="0,0,0,32" />
 
-                    <Label
-                        Text="Step 1 of 2 — Receive Messages"
-                        FontSize="26" FontAttributes="Bold"
-                        HorizontalTextAlignment="Center"
-                        TextColor="{AppThemeBinding Light={StaticResource OnBackground}, Dark={StaticResource OnBackgroundDark}}"
-                        Margin="0,0,0,12" />
+                <Label Text="WHAT THIS ENABLES"
+                    FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Margin="0,0,0,12" />
 
-                    <Label
-                        Text="PesaScope needs permission to receive SMS so it can automatically capture new M-Pesa transactions."
-                        FontSize="15" LineHeight="1.5"
-                        HorizontalTextAlignment="Center"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
-                        Margin="0,0,0,32" />
+                <Border
+                    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
+                    StrokeThickness="0" Margin="0,0,0,32">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="20" Spacing="18">
 
-                    <!-- Why section -->
-                    <Label Text="WHAT THIS ENABLES"
-                        FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        Margin="0,0,0,12" />
-
-                    <Border
-                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                        StrokeThickness="0" Margin="0,0,0,32">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <VerticalStackLayout Padding="20" Spacing="18">
-
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                                <Label Grid.Column="0" Text="⚡" FontSize="20" VerticalOptions="Start" />
-                                <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                    <Label Text="Real-time transaction capture"
-                                        FontSize="14" FontAttributes="Bold"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
-                                    <Label Text="New M-Pesa messages are picked up and categorized the moment they arrive, even when the app is in the background."
-                                        FontSize="13" LineHeight="1.4"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                            <BoxView HeightRequest="1"
-                                Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
-                                Opacity="0.5" />
-
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                                <Label Grid.Column="0" Text="🎯" FontSize="20" VerticalOptions="Start" />
-                                <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                    <Label Text="Always up to date"
-                                        FontSize="14" FontAttributes="Bold"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
-                                    <Label Text="Your spending data stays current without needing to sync manually."
-                                        FontSize="13" LineHeight="1.4"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <!-- Privacy note -->
-                    <Border
-                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
-                        StrokeThickness="0">
-
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="14" />
-                        </Border.StrokeShape>
-
-                        <Grid
-                            Padding="16"
-                            ColumnDefinitions="Auto,*"
-                            ColumnSpacing="12">
-
-                            <Label
-                                Grid.Column="0"
-                                Text="🔒"
-                                FontSize="18"
-                                VerticalOptions="Start" />
-
-                            <Label
-                                Grid.Column="1"
-                                Text="PesaScope only reads MPESA messages. Nothing leaves your device."
-                                FontSize="13"
-                                LineHeight="1.4"
-                                LineBreakMode="WordWrap"
-                                TextColor="{AppThemeBinding Light={StaticResource OnPrimaryContainer}, Dark={StaticResource OnPrimaryContainerDark}}" />
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                            <Label Grid.Column="0" Text="📥" FontSize="20" VerticalOptions="Start" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Text="Import your history"
+                                    FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
+                                <Label Text="We read your existing M-Pesa messages once, to build your transaction history."
+                                    FontSize="13" LineHeight="1.4"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                            </VerticalStackLayout>
                         </Grid>
 
-                    </Border>
+                        <BoxView HeightRequest="1"
+                            Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
+                            Opacity="0.5" />
 
-                </VerticalStackLayout>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                            <Label Grid.Column="0" Text="⚡" FontSize="20" VerticalOptions="Start" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Text="Real-time capture"
+                                    FontSize="14" FontAttributes="Bold"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
+                                <Label Text="New M-Pesa messages are picked up and categorized the moment they arrive."
+                                    FontSize="13" LineHeight="1.4"
+                                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                            </VerticalStackLayout>
+                        </Grid>
 
-                <!-- ══════════════════════════════════════════════════════
-                     STEP 2 — Temporary default SMS app
-                ══════════════════════════════════════════════════════ -->
-                <VerticalStackLayout x:Name="Step2View" IsVisible="False" Spacing="0">
+                    </VerticalStackLayout>
+                </Border>
 
-                    <Border
-                        HorizontalOptions="Center"
-                        WidthRequest="100" HeightRequest="100"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryContainer}, Dark={StaticResource SecondaryContainerDark}}"
-                        StrokeThickness="0"
-                        Margin="0,0,0,32">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="28" />
-                        </Border.StrokeShape>
-                        <Label Text="📥" FontSize="44"
-                            HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-
-                    <Label
-                        Text="Step 2 of 2 — Import History"
-                        FontSize="26" FontAttributes="Bold"
-                        HorizontalTextAlignment="Center"
-                        TextColor="{AppThemeBinding Light={StaticResource OnBackground}, Dark={StaticResource OnBackgroundDark}}"
-                        Margin="0,0,0,12" />
-
-                    <Label
-                        Text="To import your existing M-Pesa history, PesaScope needs to temporarily become your default SMS app. This is only needed to read your past messages. Once imported, PesaScope captures new transactions in the background automatically — no default app required."
-                        FontSize="15" LineHeight="1.5"
-                        HorizontalTextAlignment="Center"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
-                        Margin="0,0,0,32" />
-
-                    <!-- How it works -->
-                    <Label Text="HOW IT WORKS"
-                        FontSize="11" FontAttributes="Bold" CharacterSpacing="1.2"
-                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        Margin="0,0,0,12" />
-
-                    <Border
-                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
-                        StrokeThickness="0" Margin="0,0,0,32">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <VerticalStackLayout Padding="20" Spacing="0">
-
-                            <Grid ColumnDefinitions="32,*" ColumnSpacing="12" Margin="0,0,0,16">
-                                <Border Grid.Column="0"
-                                    WidthRequest="28" HeightRequest="28"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                    StrokeThickness="0" HorizontalOptions="Start" VerticalOptions="Start">
-                                    <Border.StrokeShape>
-                                        <Ellipse />
-                                    </Border.StrokeShape>
-                                    <Label Text="1" FontSize="12" FontAttributes="Bold"
-                                        TextColor="White"
-                                        HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="Set PesaScope as default"
-                                        FontSize="14" FontAttributes="Bold"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
-                                    <Label Text="Android will show a system dialog — tap PesaScope to confirm."
-                                        FontSize="13" LineHeight="1.4"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                            <BoxView HeightRequest="1"
-                                Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
-                                Opacity="0.4" Margin="0,0,0,16" />
-
-                            <Grid ColumnDefinitions="32,*" ColumnSpacing="12" Margin="0,0,0,16">
-                                <Border Grid.Column="0"
-                                    WidthRequest="28" HeightRequest="28"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                    StrokeThickness="0" HorizontalOptions="Start" VerticalOptions="Start">
-                                    <Border.StrokeShape>
-                                        <Ellipse />
-                                    </Border.StrokeShape>
-                                    <Label Text="2" FontSize="12" FontAttributes="Bold"
-                                        TextColor="White"
-                                        HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="We import your M-Pesa history"
-                                        FontSize="14" FontAttributes="Bold"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
-                                    <Label Text="PesaScope reads all past MPESA messages and categorizes them."
-                                        FontSize="13" LineHeight="1.4"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                            <BoxView HeightRequest="1"
-                                Color="{AppThemeBinding Light={StaticResource OutlineVariant}, Dark={StaticResource OutlineVariantDark}}"
-                                Opacity="0.4" Margin="0,0,0,16" />
-
-                            <Grid ColumnDefinitions="32,*" ColumnSpacing="12">
-                                <Border Grid.Column="0"
-                                    WidthRequest="28" HeightRequest="28"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                    StrokeThickness="0" HorizontalOptions="Start" VerticalOptions="Start">
-                                    <Border.StrokeShape>
-                                        <Ellipse />
-                                    </Border.StrokeShape>
-                                    <Label Text="3" FontSize="12" FontAttributes="Bold"
-                                        TextColor="White"
-                                        HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="Switch back — we remind you"
-                                        FontSize="14" FontAttributes="Bold"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}" />
-                                    <Label Text="After import, PesaScope prompts you to restore your preferred SMS app."
-                                        FontSize="13" LineHeight="1.4"
-                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <!-- Skip option -->
-                    <Label
-                        x:Name="SkipImportLabel"
-                        Text="Skip history import ->"
-                        FontSize="13"
-                        HorizontalOptions="Center"
-                        TextDecorations="Underline"
-                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnSkipImportTapped" />
-                        </Label.GestureRecognizers>
-                    </Label>
-
-                </VerticalStackLayout>
+                <Border
+                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainer}, Dark={StaticResource PrimaryContainerDark}}"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14" />
+                    </Border.StrokeShape>
+                    <Grid Padding="16" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0" Text="🔒" FontSize="18" VerticalOptions="Start" />
+                        <Label Grid.Column="1"
+                            Text="PesaScope only reads MPESA messages. Nothing leaves your device."
+                            FontSize="13" LineHeight="1.4" LineBreakMode="WordWrap"
+                            TextColor="{AppThemeBinding Light={StaticResource OnPrimaryContainer}, Dark={StaticResource OnPrimaryContainerDark}}" />
+                    </Grid>
+                </Border>
 
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ── Bottom button area ─────────────────────────────────────── -->
         <VerticalStackLayout Grid.Row="1" Padding="32,12,32,48" Spacing="10">
 
             <Button
@@ -313,7 +115,6 @@
                 BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                 TextColor="{AppThemeBinding Light={StaticResource OnPrimary}, Dark={StaticResource OnPrimaryDark}}" />
 
-            <!-- Denial guidance — shown only after a deny -->
             <Border
                 x:Name="DeniedBanner"
                 IsVisible="False"
@@ -328,7 +129,7 @@
                         FontSize="14" FontAttributes="Bold"
                         TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}" />
                     <Label x:Name="DeniedMessage"
-                        Text="PesaScope cannot capture new transactions without this. Tap Try Again or go to Settings -> Apps -> PesaScope -> Permissions."
+                        Text="PesaScope cannot capture transactions without this. Tap Try Again or go to Settings -> Apps -> PesaScope -> Permissions."
                         FontSize="13" LineHeight="1.4"
                         TextColor="{AppThemeBinding Light={StaticResource OnErrorContainer}, Dark={StaticResource OnErrorContainerDark}}" />
                 </VerticalStackLayout>
@@ -339,4 +140,3 @@
     </Grid>
 
 </uranium:UraniumContentPage>
-
