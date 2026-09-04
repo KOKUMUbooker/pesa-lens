@@ -14,15 +14,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
     private readonly IMpesaSmsParser _mpesaSmsParser;
     private readonly IAutoCategorizationService _autoCategorizationService;
 
-    private bool _waitingForRestoreResult = false;
-
-    /// <summary>
-    /// Set by PermissionPage before navigating here.
-    /// True  -> user set PesaScope as default; we can bulk-import history.
-    /// False -> user skipped; we only capture future transactions.
-    /// </summary>
-    public bool HistoricalImportEnabled { get; set; }
-
     public ImportProgressPage(
         IAppSettingsRepository appSettingsRepo,
         ITransactionRepository transactionRepo,
@@ -44,33 +35,8 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-        if (_waitingForRestoreResult)
-        {
-            // Returning from the system Default Apps settings screen
-            _waitingForRestoreResult = false;
-
-            if (!IsPesaLensStillDefault())
-            {
-                // User successfully switched back — hide the card
-                RestoreDefaultCard.IsVisible = false;
-                StatusLabel.Text = "✓ Default SMS app restored.";
-            }
-            else
-            {
-                // Still default — reset button so they can try again
-                RestoreDefaultButton.IsEnabled = true;
-                RestoreDefaultButton.Text = "Restore Default SMS App";
-            }
-        }
-        else
-        {
-            // Normal first appearance — run the import
-            _ = RunImportAsync();
-        }
+        _ = RunImportAsync();
     }
-
-    // ── Main import orchestration ─────────────────────────────────────────────
 
     private async Task RunImportAsync()
     {
@@ -78,10 +44,10 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
         {
             var settings = await _appSettingsRepo.GetAsync();
 
-            if (HistoricalImportEnabled && !settings.ImportComplete)
+            if (!settings.ImportComplete)
                 await RunHistoricalImportAsync();
             else
-                await RunSkippedImportAsync();
+                await FinishAsync(importedCount: 0, wasHistorical: false, noMessages: false);
         }
         catch (Exception ex)
         {
@@ -89,8 +55,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
             ShowDoneButton("Continue Anyway");
         }
     }
-
-    // ── Historical import (user set PesaScope as default) ─────────────────────
 
     private async Task RunHistoricalImportAsync()
     {
@@ -111,22 +75,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
         await FinishAsync(importedCount: imported, wasHistorical: true, duplicateCount: duplicates);
     }
 
-    // ── Skipped path (user chose not to set as default) ───────────────────────
-
-    private async Task RunSkippedImportAsync()
-    {
-        await SetStatusAsync("Setting up PesaScope...");
-
-        await MainThread.InvokeOnMainThreadAsync(() =>
-        {
-            ImportProgressBar.Progress = 1.0;
-            CountLabel.IsVisible = false;
-        });
-
-        await FinishAsync(importedCount: 0, wasHistorical: false, false, IsPesaLensStillDefault());
-    }
-
-    // ── Parse + insert ────────────────────────────────────────────────────────
     private async Task<(int Inserted, int Duplicates)> ParseAndImportAsync(
         List<PesaScope.App.Services.Interfaces.SmsMessage> messages)
     {
@@ -171,12 +119,10 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
         return (inserted, duplicates);
     }
 
-    // ── Completion ────────────────────────────────────────────────────────────
     private async Task FinishAsync(
         int importedCount,
         bool wasHistorical,
         bool noMessages = false,
-        bool showRestoreCard = false,
         int duplicateCount = 0)
     {
         await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -199,8 +145,7 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
                 TitleLabel.Text = "Ready to Go!";
                 SubtitleLabel.Text =
                     "PesaScope will automatically capture new M-Pesa transactions as they arrive.";
-                StatusLabel.Text =
-                    "Tip: you can import your history later from Settings -> Sync.";
+                StatusLabel.Text = "Tip: you can re-sync from Settings at any time.";
                 CountLabel.IsVisible = false;
             }
             else
@@ -218,9 +163,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
                     $"{importedCount} transaction{(importedCount == 1 ? "" : "s")} imported";
             }
 
-            if (wasHistorical || showRestoreCard)
-                RestoreDefaultCard.IsVisible = true;
-
             var settings = await _appSettingsRepo.GetAsync();
             settings.ImportComplete = true;
             await _appSettingsRepo.UpdateAsync(settings);
@@ -228,67 +170,6 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
             ShowDoneButton("Go to Dashboard");
         });
     }
-
-    // ── Restore default SMS app ───────────────────────────────────────────────
-
-    private void OnRestoreDefaultClicked(object? sender, EventArgs e)
-    {
-        _waitingForRestoreResult = true;
-        LaunchChangeDefaultDialog();
-        RestoreDefaultButton.IsEnabled = false;
-        RestoreDefaultButton.Text = "Opening system settings…";
-    }
-
-    private void OnRestoreLaterTapped(object? sender, EventArgs e)
-    {
-        RestoreDefaultCard.IsVisible = false;
-    }
-
-    private static void LaunchChangeDefaultDialog()
-    {
-        var activity = Platform.CurrentActivity;
-        if (activity == null) return;
-
-        // API 29+: open the Default Apps settings screen so the user
-        // can pick their preferred SMS app. RoleManager has no API to
-        // release a role — you can only direct the user to do it themselves.
-        var intent = new Android.Content.Intent(
-            Android.Provider.Settings.ActionManageDefaultAppsSettings);
-
-        // Fallback for OEM ROMs that don't expose that screen
-        if (activity.PackageManager?.ResolveActivity(intent, 0) == null)
-        {
-            intent = new Android.Content.Intent(
-                Android.Provider.Settings.ActionApplicationDetailsSettings);
-            intent.SetData(Android.Net.Uri.Parse(
-                $"package:{Android.App.Application.Context.PackageName}"));
-        }
-
-        activity.StartActivity(intent);
-    }
-
-    // ── Done / navigate to dashboard ──────────────────────────────────────────
-
-    private async void OnDoneClicked(object? sender, EventArgs e)
-    {
-        if (IsPesaLensStillDefault())
-        {
-            // Force them to restore before proceeding
-            await DisplayAlertAsync(
-                "One More Step",
-                "Please switch back to your preferred SMS app before continuing. " +
-                "Tap \"Restore Default SMS App\" above to do this.",
-                "OK");
-            return; // ← block navigation
-        }
-
-        await UpdateOnboardingCompleteState();
-
-        if (Application.Current?.Windows.FirstOrDefault() is Window window)
-            window.Page = new AppShell();
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private Task SetStatusAsync(string message) =>
         MainThread.InvokeOnMainThreadAsync(() => StatusLabel.Text = message);
@@ -299,30 +180,14 @@ public partial class ImportProgressPage : UraniumUI.Pages.UraniumContentPage
         DoneButton.IsVisible = true;
     }
 
-    private static bool IsPesaLensStillDefault()
-    {
-        var context = Android.App.Application.Context;
-
-        // API 29+: use RoleManager — the same API used to request the role
-        if (OperatingSystem.IsAndroidVersionAtLeast(29))
-        {
-            var roleManager = context.GetSystemService(
-                Android.Content.Context.RoleService) as Android.App.Roles.RoleManager;
-
-            if (roleManager is not null)
-                return roleManager.IsRoleHeld(Android.App.Roles.RoleManager.RoleSms);
-        }
-
-        // Fallback for older APIs
-        var defaultPkg = Android.Provider.Telephony.Sms.GetDefaultSmsPackage(context);
-        return defaultPkg == context.PackageName;
-    }
-
-    private async Task UpdateOnboardingCompleteState()
+    private async void OnDoneClicked(object? sender, EventArgs e)
     {
         var settings = await _appSettingsRepo.GetAsync();
         settings.OnboardingComplete = true;
         settings.ImportComplete = true;
         await _appSettingsRepo.UpdateAsync(settings);
+
+        if (Application.Current?.Windows.FirstOrDefault() is Window window)
+            window.Page = new AppShell();
     }
 }
