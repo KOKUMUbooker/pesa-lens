@@ -110,13 +110,12 @@ PesaScope requires SMS read permission to parse M-Pesa messages. Android classif
 
 ### Onboarding overview
 
-| Step                                | What happens                                                             |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| Grant SMS permission                | Allows real-time capture of incoming M-Pesa messages                     |
-| Set as default SMS app _(optional)_ | Required only for importing your existing M-Pesa history from your inbox |
-| Restore default SMS app             | Prompted immediately after history import completes                      |
+| Step                 | What happens                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Grant SMS permission | A single permission grant enables both reading your existing M-Pesa history and capturing new transactions as they arrive |
+| Import history       | PesaScope reads existing M-Pesa messages from your inbox and imports them automatically — no extra setup needed           |
 
-> Ongoing transaction capture works in the background without PesaScope being your default SMS app.
+> Both historical import and ongoing background capture work purely off the SMS read permission.
 
 ## Privacy
 
