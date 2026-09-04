@@ -9,13 +9,11 @@
     x:DataType="v:ImportProgressPage"
     BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
 
-    <Grid RowDefinitions="*, Auto" >
+    <Grid RowDefinitions="*, Auto">
 
-        <!-- ── Main content ───────────────────────────────────────────── -->
-        <ScrollView Grid.Row="0 ">
+        <ScrollView Grid.Row="0">
             <VerticalStackLayout VerticalOptions="Center" Spacing="0" Padding="32,64,32,48">
 
-                <!-- Icon -->
                 <Border
                     HorizontalOptions="Center"
                     WidthRequest="96" HeightRequest="96"
@@ -33,7 +31,6 @@
                         VerticalOptions="Center" />
                 </Border>
 
-                <!-- Title -->
                 <Label
                     x:Name="TitleLabel"
                     Text="Importing Your Transactions"
@@ -43,7 +40,6 @@
                     TextColor="{AppThemeBinding Light={StaticResource OnBackground}, Dark={StaticResource OnBackgroundDark}}"
                     Margin="0,0,0,12" />
 
-                <!-- Subtitle -->
                 <Label
                     x:Name="SubtitleLabel"
                     Text="This only happens once. Sit tight while we read your M-Pesa messages."
@@ -52,7 +48,6 @@
                     TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
                     Margin="0,0,0,48" />
 
-                <!-- Progress bar — hidden after import completes -->
                 <ProgressBar
                     x:Name="ImportProgressBar"
                     Progress="0"
@@ -60,7 +55,6 @@
                     HeightRequest="6"
                     Margin="0,0,0,16" />
 
-                <!-- Imported count -->
                 <Label
                     x:Name="CountLabel"
                     Text="0 transactions imported"
@@ -69,11 +63,10 @@
                     TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariant}, Dark={StaticResource OnSurfaceVariantDark}}"
                     Margin="0,0,0,24" />
 
-                <!-- Status message -->
                 <Border
                     BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceVariant}, Dark={StaticResource SurfaceVariantDark}}"
                     StrokeThickness="0"
-                    Margin="0,0,0,24">
+                    Margin="0,0,0,0">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="12" />
                     </Border.StrokeShape>
@@ -86,57 +79,9 @@
                         Padding="16,12" />
                 </Border>
 
-                <!-- ══════════════════════════════════════════════════════
-                     RESTORE DEFAULT SMS APP CARD
-                     Only visible after a successful historical import,
-                     i.e. when PesaScope was temporarily set as default.
-                ══════════════════════════════════════════════════════ -->
-                <Border
-                    x:Name="RestoreDefaultCard"
-                    IsVisible="False"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryContainer}, Dark={StaticResource SecondaryContainerDark}}"
-                    StrokeThickness="0"
-                    Margin="0,0,0,0">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="16" />
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Padding="20" Spacing="14">
-
-                        <!-- Header -->
-                        <HorizontalStackLayout Spacing="10">
-                            <Label Text="↩️" FontSize="22" VerticalOptions="Center" />
-                            <Label
-                                Text="Switch back to your SMS app"
-                                FontSize="15" FontAttributes="Bold"
-                                VerticalOptions="Center"
-                                TextColor="{AppThemeBinding Light={StaticResource OnSecondaryContainer}, Dark={StaticResource OnSecondaryContainerDark}}"/>
-                        </HorizontalStackLayout>
-
-                        <!-- Explanation -->
-                        <Label
-                            Text="PesaScope is still your default SMS app. You must switch back to your preferred messaging app before continuing — PesaScope will keep capturing M-Pesa transactions in the background automatically."
-                            FontSize="13"
-                            LineHeight="1.45"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSecondaryContainer}, Dark={StaticResource OnSecondaryContainerDark}}"/>
-                        
-                        <!-- Restore button -->
-                        <Button
-                            x:Name="RestoreDefaultButton"
-                            Text="Restore Default SMS App"
-                            Clicked="OnRestoreDefaultClicked"
-                            HeightRequest="46"
-                            CornerRadius="10"
-                            FontSize="14" FontAttributes="Bold"
-                            BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
-                            TextColor="{AppThemeBinding Light={StaticResource OnSecondary}, Dark={StaticResource OnSecondaryDark}}"/>
-
-                    </VerticalStackLayout>
-                </Border>
-
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ── Bottom: Done button (hidden until import completes) ─────── -->
         <VerticalStackLayout
             Grid.Row="1"
             VerticalOptions="Center"
