@@ -1,5 +1,4 @@
 ﻿using PesaScope.App.Data;
-using PesaScope.App.Data.Repositories;
 using PesaScope.App.Data.Repositories.Interfaces;
 using PesaScope.App.Views.Onboarding;
 using PesaScope.App.Views.Security;
