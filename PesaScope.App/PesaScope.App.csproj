@@ -30,8 +30,8 @@
 		<ApplicationIdGuid>d2c853b3-5f37-46c0-be1e-d50cab8976a3</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.21</ApplicationDisplayVersion>
-		<ApplicationVersion>22</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.22</ApplicationDisplayVersion>
+		<ApplicationVersion>23</ApplicationVersion>
 
 		<!-- To allow debugging via usb on real device -->
 		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
@@ -76,7 +76,8 @@
 		<PackageReference Include="Plugin.LocalNotification" Version="14.1.1" />
 		<PackageReference Include="Plugin.Maui.Biometric" Version="0.1.0" />
 		<PackageReference Include="QuestPDF" Version="[2023.12.6]" /> <!-- New QuestPDF versions ditched support for maui, so this we're locking this version -->
-		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="sqlite-net-e" Version="1.11.285" />
+		<PackageReference Include="SourceGear.sqlite3" Version="3.53.4" />
 		<PackageReference Include="UraniumUI.Material" Version="2.11.0" />
 		<PackageReference Include="UraniumUI.Icons.MaterialSymbols" Version="2.11.0" />
 		<PackageReference Include="UraniumUI.Dialogs.Mopups" Version="2.11.0" />
